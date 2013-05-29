@@ -1,6 +1,6 @@
 #include "CurrentApp.h"
 
-HelloPolycodeApp::HelloPolycodeApp(PolycodeView *view) : EventHandler() {
+CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 
 	core = new SDLCore(view, 640,480,false,false,0,0,120);	  
 
@@ -33,29 +33,91 @@ HelloPolycodeApp::HelloPolycodeApp(PolycodeView *view) : EventHandler() {
 	light->lookAt(Vector3(0,0,0));
 	scene->addLight(light);
 
+	Screen *hud = new Screen();
+	keys_pressed = new ScreenLabel("Keys that are pressed:",16);
+	hud->addChild(keys_pressed);
+	a_pressed = new ScreenLabel("a:no", 16);
+	a_pressed->setPosition(0,20);
+	d_pressed = new ScreenLabel("d:no", 16);
+	d_pressed->setPosition(0,40);
+	hud->addChild(a_pressed);
+	hud->addChild(d_pressed);
+
 	scene->getDefaultCamera()->setPosition(0,1,7);
 	scene->getDefaultCamera()->lookAt(Vector3(0,0,0));
+	
+	player = Player(obj, scene->getDefaultCamera());
 
 	core->getInput()->addEventListener(this, InputEvent::EVENT_KEYDOWN);
 	core->getInput()->addEventListener(this, InputEvent::EVENT_KEYUP);
 	
 }
 
-HelloPolycodeApp::~HelloPolycodeApp() {
+CurrentApp::~CurrentApp() {
 
 }
 
-void HelloPolycodeApp::HandleEvent(Event *e)
+void CurrentApp::handleEvent(Event *e)
 {
-	if(e -> getDispatcher() == core->getInput());
+
+	if(e -> getDispatcher() == core->getInput())
 	{
 		InputEvent * inputEvent = (InputEvent*)e;
 		switch(e-> getEventCode())
 		{
+			case InputEvent::EVENT_KEYDOWN:
+				switch(inputEvent->keyCode())
+				{
+					case KEY_UP:
+						player.dir.y = 10;
+						break;
+					case KEY_DOWN:
+						player.dir.y = -10;
+						break;
+					case KEY_LEFT:
+						player.dir.x = -10;
+						a_pressed->setText("a:yes");
+						break;
+					case KEY_RIGHT:
+						player.dir.x = 10;
+						d_pressed->setText("d:yes");
+						break;
+					default:
+						break;
+								
+				}
+				break;
+			case InputEvent::EVENT_KEYUP:
+				switch(inputEvent->keyCode())
+				{
+					case KEY_UP:
+						player.dir.y = 0;
+						break;
+					case KEY_DOWN:
+						player.dir.y = 0;
+						break;
+					case KEY_LEFT:
+						player.dir.x = 0;
+						a_pressed->setText("a:no");
+						break;
+					case KEY_RIGHT:
+						player.dir.x =0;
+						d_pressed->setText("d:no");
+						break;
+					default:
+						break;
+				}
+				break;
+			default:
+				break;
+					
 		}
+		
 	}
 }
 
-bool HelloPolycodeApp::Update() {
+bool CurrentApp::Update() {
+	Number elapsed = core->getElapsed();
+	player.Update(elapsed);
     return core->updateAndRender();
 }

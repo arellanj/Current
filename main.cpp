@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[]) {
 	PolycodeView *view = new PolycodeView("HellPolycode!");
-	HelloPolycodeApp *app = new HelloPolycodeApp(view);
+	CurrentApp *app = new CurrentApp(view);
 	while(app->Update()) {}
 	return 0;
 }

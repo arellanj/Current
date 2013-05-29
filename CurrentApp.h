@@ -1,15 +1,19 @@
 #include <Polycode.h>
 #include "PolycodeView.h"
 #include "Polycode3DPhysics.h"
+#include "player.h"
+#include <iostream>
 using namespace Polycode;
 
-class HelloPolycodeApp : public EventHandler {
+class CurrentApp : public EventHandler {
 public:
-    HelloPolycodeApp(PolycodeView *view);
-    ~HelloPolycodeApp();
+    CurrentApp(PolycodeView *view);
+    ~CurrentApp();
     bool Update();
     
 private:
 	Core *core;
-	void HandleEvent(Event *e);
+	Player player;
+	ScreenLabel *keys_pressed, *a_pressed, *d_pressed;
+	void handleEvent(Event *e);
 };
