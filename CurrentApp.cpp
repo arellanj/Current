@@ -12,34 +12,34 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	CollisionScene *scene = new CollisionScene();
 	ScenePrimitive * obj = new ScenePrimitive( ScenePrimitive::TYPE_SPHERE, 0.5, 10,10);
 	obj->setPosition(Vector3(0.0, 0.0, 0.0));
-	//obj->setMaterialByName("CubeMaterial");
-	obj->loadTexture("Resources/pink_texture.png");
+	obj->setMaterialByName("CubeMaterial");
+	//obj->loadTexture("Resources/pink_texture.png");
 	scene->addCollisionChild(obj);
 
 	ScenePrimitive * ground = new ScenePrimitive(ScenePrimitive::TYPE_PLANE,10,1000);
-	//ground->setMaterialByName("GroundMaterial");
+	ground->setMaterialByName("GroundMaterial");
+	//ground->loadTexture("Resources/green_texture.png");
 	ground->setPosition(0,-5,-500);
-	ground->loadTexture("Resources/green_texture.png");
 	scene->addEntity(ground);
 	
 	ScenePrimitive * wall1 = new ScenePrimitive(ScenePrimitive::TYPE_PLANE,10,1000);
-	//wall1->setMaterialByName("GroundMaterial");
-	wall1->loadTexture("Resources/green_texture.png");
+	wall1->setMaterialByName("GroundMaterial");
+	//wall1->loadTexture("Resources/green_texture.png");
 	scene->addEntity(wall1);
 	
 	wall1->Roll(-90);
 	wall1->setPosition(-5,0 ,-500);
 
 	ScenePrimitive * wall2 = new ScenePrimitive(ScenePrimitive::TYPE_PLANE,10,1000);
-	//wall2->setMaterialByName("GroundMaterial");
-	wall2->loadTexture("Resources/green_texture.png");
+	wall2->setMaterialByName("GroundMaterial");
+	//wall2->loadTexture("Resources/green_texture.png");
 	wall2->Roll(90);
 	wall2->setPosition(5,0,-500);
 	scene->addEntity(wall2);
 
 	ScenePrimitive * ceiling = new ScenePrimitive(ScenePrimitive::TYPE_PLANE,10,1000);
-	//ceiling->setMaterialByName("GroundMaterial");
-	ceiling->loadTexture("Resources/green_texture.png");
+	ceiling->setMaterialByName("GroundMaterial");
+	//ceiling->loadTexture("Resources/green_texture.png");
 	ceiling->Roll(180);
 	ceiling->setPosition(0,5,-500);
 	scene->addEntity(ceiling);

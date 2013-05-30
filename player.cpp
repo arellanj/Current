@@ -13,7 +13,10 @@ Player::Player( ScenePrimitive * obj)
 void Player::Load(Scene* scene, Screen * screen)
 {
 	cam = scene->getDefaultCamera();
-	spotlight = new SceneLight(SceneLight::SPOT_LIGHT, scene, 33, .02, .5, .5);
+	spotlight = new SceneLight(SceneLight::SPOT_LIGHT, scene, 33, .2, .5, .05);
+	spotlight->setSpotlightProperties(20,6);
+	spotlight->enableShadows(true);
+	spotlight->enableDebugDraw(true);
 	scene->addLight(spotlight);
 	
 	timer = new ScreenLabel("Time: 00:00:00", 16);
@@ -50,9 +53,9 @@ void Player::Update(Number elapsed)
 	}
 	std::cout<<"Timer:"<<minutes<<":"<<seconds<<":"<<milliseconds<<std::endl;
 	vel += accl*elapsed;
-	if(vel.z > 100)
+	if(vel.z < -10)
 	{
-		vel.z = 100;
+		vel.z = -10;
 	}
 
 	obj->Translate(vel*elapsed);
