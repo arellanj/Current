@@ -22,7 +22,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	ground->setPosition(0,-5,-500);
 	scene->addEntity(ground);
 	
-	ScenePrimitive * wall1 = new ScenePrimitive(ScenePrimitive::TYPE_PLANE,10,1000);
+	ScenePrimitive * wall1 = new ScenePrimitive(ScenePrimitive::TYPE_PLANE,10,900);
 	wall1->setMaterialByName("GroundMaterial");
 	//wall1->loadTexture("Resources/green_texture.png");
 	scene->addEntity(wall1);
@@ -30,7 +30,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	wall1->Roll(-90);
 	wall1->setPosition(-5,0 ,-500);
 
-	ScenePrimitive * wall2 = new ScenePrimitive(ScenePrimitive::TYPE_PLANE,10,1000);
+	ScenePrimitive * wall2 = new ScenePrimitive(ScenePrimitive::TYPE_PLANE,10,900);
 	wall2->setMaterialByName("GroundMaterial");
 	//wall2->loadTexture("Resources/green_texture.png");
 	wall2->Roll(90);
@@ -69,6 +69,13 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	core->getInput()->addEventListener(this, InputEvent::EVENT_KEYUP);
 	
 	player.Load(scene, hud);
+	
+	
+	enemies = EnemyManager(scene);
+	
+	enemies.addEnemy(Enemy(COLUMN,Vector3(1.5,0,-50),10));
+	enemies.addEnemy(Enemy(SEAWEED,Vector3(-1.5,5,-50)));
+	enemies.addEnemy(Enemy(SHARK,Vector3(1,0,-75),5));
 }
 
 CurrentApp::~CurrentApp() {
@@ -137,5 +144,6 @@ void CurrentApp::handleEvent(Event *e)
 bool CurrentApp::Update() {
 	Number elapsed = core->getElapsed();
 	player.Update(elapsed);
+	enemies.update(elapsed);
     return core->updateAndRender();
 }
