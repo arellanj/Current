@@ -7,12 +7,15 @@ Player::Player( ScenePrimitive * obj)
 	accl = Vector3(0,0,-1);
 	minutes =0;
 	seconds = 0;
+	levelPos = 0;
 	milliseconds = 0;
+	maxSpeed = 40;
 }
 
 void Player::Load(Scene* scene, Screen * screen)
 {
 	cam = scene->getDefaultCamera();
+	cam -> lookAt(obj->getPosition());
 	spotlight = new SceneLight(SceneLight::SPOT_LIGHT, scene, 33, .2, .5, .05);
 	spotlight->setSpotlightProperties(20,6);
 	spotlight->enableShadows(true);
@@ -51,17 +54,17 @@ void Player::Update(Number elapsed)
 			seconds -= 60;
 		}
 	}
-	std::cout<<"Timer:"<<minutes<<":"<<seconds<<":"<<milliseconds<<std::endl;
+	//std::cout<<"Timer:"<<minutes<<":"<<seconds<<":"<<milliseconds<<std::endl;
 	vel += accl*elapsed;
-	if(vel.z < -10)
+	if(vel.z < -maxSpeed)
 	{
-		vel.z = -10;
+		vel.z = -maxSpeed;
 	}
-
+	std::cout<<"speed: "<<vel.z<<std::endl;
 	obj->Translate(vel*elapsed);
 	
 	cam-> Translate(0,0, vel.z*elapsed);
-	cam->lookAt(obj->getPosition());
+	//cam->lookAt(obj->getPosition());
 	spotlight->setPosition( cam -> getPosition() );
 	spotlight->lookAt( obj->getPosition() );
 }
@@ -70,3 +73,9 @@ const Vector3& Player::getPosition()
 {
 	return obj->getPosition();
 }
+
+void Player::setMaxSpeed(double speed)
+{
+	maxSpeed = speed;
+}
+

@@ -15,7 +15,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	obj->setMaterialByName("CubeMaterial");
 	//obj->loadTexture("Resources/pink_texture.png");
 	scene->addCollisionChild(obj);
-
+/*
 	ScenePrimitive * ground = new ScenePrimitive(ScenePrimitive::TYPE_PLANE,10,1000);
 	ground->setMaterialByName("GroundMaterial");
 	//ground->loadTexture("Resources/green_texture.png");
@@ -43,7 +43,17 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	ceiling->Roll(180);
 	ceiling->setPosition(0,5,-500);
 	scene->addEntity(ceiling);
-
+*/
+		double next_pos = 0;
+	for(int i = 0; i < 100 ; i++)
+	{
+		int size = ( rand() % 4 ) +10;
+		int length = ( rand() % 40) +10;
+		std::cout<<"MADE: "<<size<<" , "<<length<<" at :" << next_pos + length/2.0<< std::endl;
+		next_pos += length;
+		Level * newlevel = new Level(size,length, Vector3(0,0,-next_pos), 10, scene);
+		path.push_back(newlevel);
+	}
 
 //	SceneLight * light = new SceneLight ( SceneLight:: SPOT_LIGHT, scene, 33 );
 //	light->setPosition(0,4,4);
@@ -136,6 +146,14 @@ void CurrentApp::handleEvent(Event *e)
 
 bool CurrentApp::Update() {
 	Number elapsed = core->getElapsed();
+	bool wasIn = path[player.levelPos]->isIn(player.getPosition());
 	player.Update(elapsed);
+	bool isIn = path[player.levelPos]->isIn(player.getPosition());
+std::cout<<wasIn<<" "<< isIn<<" pos "<<player.levelPos<<std::endl;
+	if(wasIn && !isIn )
+	{
+		player.levelPos++;
+		player.setMaxSpeed( path[player.levelPos] -> getspeed());
+	}
     return core->updateAndRender();
 }

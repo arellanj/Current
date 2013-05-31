@@ -15,7 +15,9 @@ class Player
 		SceneLight * spotlight;
 		ScreenLabel * timer;
 		Number minutes,seconds,milliseconds;
+		double maxSpeed;
 	public:
+		int levelPos;
 		Vector3 accl;
 		Vector3 vel;
 		Player(ScenePrimitive * obj = NULL);
@@ -24,7 +26,9 @@ class Player
 		void rotate(const Quaternion & q);
 		const Vector3& getPosition();
 		void Update(Number elapsed);
+		void setMaxSpeed(double speed);
 };
+
 
 #endif // __PLAYER_H__
 
