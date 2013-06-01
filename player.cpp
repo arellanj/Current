@@ -18,8 +18,6 @@ void Player::Load(Scene* scene, Screen * screen)
 	cam -> lookAt(obj->getPosition());
 	spotlight = new SceneLight(SceneLight::SPOT_LIGHT, scene, 33, .2, .5, .05);
 	spotlight->setSpotlightProperties(20,6);
-	spotlight->enableShadows(true);
-	spotlight->enableDebugDraw(true);
 	scene->addLight(spotlight);
 	
 	timer = new ScreenLabel("Time: 00:00:00", 16);
@@ -62,6 +60,7 @@ void Player::Update(Number elapsed)
 	}
 	std::cout<<"speed: "<<vel.z<<std::endl;
 	obj->Translate(vel*elapsed);
+	obj->setYaw(obj->getYaw()+100*elapsed);
 	
 	cam-> Translate(0,0, vel.z*elapsed);
 	//cam->lookAt(obj->getPosition());
