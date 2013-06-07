@@ -18,6 +18,8 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	//scene->addCollisionChild(obj);
 	physScene->addPhysicsChild(obj,PhysicsSceneEntity::SHAPE_SPHERE,1.0);
 
+	scene->addCollisionChild(obj);
+/*
 	ScenePrimitive * ground = new ScenePrimitive(ScenePrimitive::TYPE_PLANE,10,1000);
 	ground->setMaterialByName("GroundMaterial");
 	//ground->loadTexture("Resources/green_texture.png");
@@ -49,6 +51,18 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	//scene->addEntity(ceiling);
 	physScene->addPhysicsChild(ceiling,PhysicsSceneEntity::SHAPE_PLANE, 0.0);
 
+	scene->addEntity(ceiling);
+*/
+		double next_pos = 0;
+	for(int i = 0; i < 100 ; i++)
+	{
+		int size = ( rand() % 4 ) +10;
+		int length = ( rand() % 40) +10;
+		std::cout<<"MADE: "<<size<<" , "<<length<<" at :" << next_pos + length/2.0<< std::endl;
+		next_pos += length;
+		Level * newlevel = new Level(size,length, Vector3(0,0,-next_pos), 10, scene);
+		path.push_back(newlevel);
+	}
 
 //	SceneLight * light = new SceneLight ( SceneLight:: SPOT_LIGHT, scene, 33 );
 //	light->setPosition(0,4,4);
