@@ -45,13 +45,13 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	scene->addEntity(ceiling);
 */
 		double next_pos = 0;
-	for(int i = 0; i < 100 ; i++)
+	for(int i = 0; i < 50 ; i++)
 	{
-		int size = ( rand() % 4 ) +10;
+		int size = ( rand() % 10 ) +6;
 		int length = ( rand() % 40) +10;
-		std::cout<<"MADE: "<<size<<" , "<<length<<" at :" << next_pos + length/2.0<< std::endl;
+		std::cout<<"MADE: "<<size<<" , "<<length<<" at :" << next_pos + length<< std::endl;
 		next_pos += length;
-		Level * newlevel = new Level(size,length, Vector3(0,0,-next_pos), 10, scene);
+		Level * newlevel = new Level(size,length, Vector3(0,0,-next_pos), 10000, scene);
 		path.push_back(newlevel);
 	}
 
@@ -70,7 +70,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	hud->addChild(a_pressed);
 	hud->addChild(d_pressed);
 
-	scene->getDefaultCamera()->setPosition(0,1,7);
+	scene->getDefaultCamera()->setPosition(0,0,19);
 	scene->getDefaultCamera()->lookAt(Vector3(0,0,0));
 	
 	player = Player(obj);
@@ -146,14 +146,20 @@ void CurrentApp::handleEvent(Event *e)
 
 bool CurrentApp::Update() {
 	Number elapsed = core->getElapsed();
-	bool wasIn = path[player.levelPos]->isIn(player.getPosition());
-	player.Update(elapsed);
-	bool isIn = path[player.levelPos]->isIn(player.getPosition());
-std::cout<<wasIn<<" "<< isIn<<" pos "<<player.levelPos<<std::endl;
-	if(wasIn && !isIn )
+	for ( int i  = 0 ; i < 50 ; i++ )
 	{
-		player.levelPos++;
-		player.setMaxSpeed( path[player.levelPos] -> getspeed());
+		std::cout<< player.getPosition().z <<std:: endl;
+		Vector3 position = player.getPosition();
+		if( path[i]->isIn(position) && i != player.levelPos)
+		{
+			std::cout<< "Player is now in: "<< i<<std::endl;
+			player.levelPos = i;
+			player.setMaxSpeed( path[i]->getspeed());
+			break;
+		}
 	}
+
+	player.Update(elapsed);
+	
     return core->updateAndRender();
 }
