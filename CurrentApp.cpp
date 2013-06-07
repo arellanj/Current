@@ -9,39 +9,48 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	CoreServices::getInstance()->getResourceManager()->addDirResource("Resources", false);
 
 
-	CollisionScene *scene = new CollisionScene();
+	//CollisionScene *scene = new CollisionScene();
+	PhysicsScene * physScene = new PhysicsScene();
 	ScenePrimitive * obj = new ScenePrimitive( ScenePrimitive::TYPE_SPHERE, 0.5, 10,10);
 	obj->setPosition(Vector3(0.0, 0.0, 0.0));
 	obj->setMaterialByName("CubeMaterial");
 	//obj->loadTexture("Resources/pink_texture.png");
+	//scene->addCollisionChild(obj);
+	physScene->addPhysicsChild(obj,PhysicsSceneEntity::SHAPE_SPHERE,1.0);
+
 	scene->addCollisionChild(obj);
 /*
 	ScenePrimitive * ground = new ScenePrimitive(ScenePrimitive::TYPE_PLANE,10,1000);
 	ground->setMaterialByName("GroundMaterial");
 	//ground->loadTexture("Resources/green_texture.png");
 	ground->setPosition(0,-5,-500);
-	scene->addEntity(ground);
+	//scene->addEntity(ground);
+	physScene->addPhysicsChild(ground,PhysicsSceneEntity::SHAPE_PLANE, 0.0);
 	
-	ScenePrimitive * wall1 = new ScenePrimitive(ScenePrimitive::TYPE_PLANE,10,1000);
+	ScenePrimitive * wall1 = new ScenePrimitive(ScenePrimitive::TYPE_PLANE,10,900);
 	wall1->setMaterialByName("GroundMaterial");
 	//wall1->loadTexture("Resources/green_texture.png");
-	scene->addEntity(wall1);
-	
+	//scene->addEntity(wall1);
 	wall1->Roll(-90);
 	wall1->setPosition(-5,0 ,-500);
+	physScene->addPhysicsChild(wall1,PhysicsSceneEntity::SHAPE_PLANE, 0.0);
 
-	ScenePrimitive * wall2 = new ScenePrimitive(ScenePrimitive::TYPE_PLANE,10,1000);
+	ScenePrimitive * wall2 = new ScenePrimitive(ScenePrimitive::TYPE_PLANE,10,900);
 	wall2->setMaterialByName("GroundMaterial");
 	//wall2->loadTexture("Resources/green_texture.png");
 	wall2->Roll(90);
 	wall2->setPosition(5,0,-500);
-	scene->addEntity(wall2);
+	//scene->addEntity(wall2);
+	physScene->addPhysicsChild(wall2,PhysicsSceneEntity::SHAPE_PLANE, 0.0);
 
 	ScenePrimitive * ceiling = new ScenePrimitive(ScenePrimitive::TYPE_PLANE,10,1000);
 	ceiling->setMaterialByName("GroundMaterial");
 	//ceiling->loadTexture("Resources/green_texture.png");
 	ceiling->Roll(180);
 	ceiling->setPosition(0,5,-500);
+	//scene->addEntity(ceiling);
+	physScene->addPhysicsChild(ceiling,PhysicsSceneEntity::SHAPE_PLANE, 0.0);
+
 	scene->addEntity(ceiling);
 */
 		double next_pos = 0;
@@ -70,15 +79,21 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	hud->addChild(a_pressed);
 	hud->addChild(d_pressed);
 
-	scene->getDefaultCamera()->setPosition(0,0,19);
-	scene->getDefaultCamera()->lookAt(Vector3(0,0,0));
-	
 	player = Player(obj);
 
 	core->getInput()->addEventListener(this, InputEvent::EVENT_KEYDOWN);
 	core->getInput()->addEventListener(this, InputEvent::EVENT_KEYUP);
 	
-	player.Load(scene, hud);
+	//player.Load(scene, hud);
+	physScene->addPhysicsChild(obj, PhysicsSceneEntity::SHAPE_SPHERE, 1.0);
+	player.Load(physScene, hud);
+	
+	
+	enemies = EnemyManager(physScene);
+	
+	enemies.addEnemy(Enemy(COLUMN,Vector3(1.5,0,-50),10));
+	enemies.addEnemy(Enemy(SEAWEED,Vector3(-1.5,5,-50)));
+	enemies.addEnemy(Enemy(SHARK,Vector3(1,0,-75),5));
 }
 
 CurrentApp::~CurrentApp() {
@@ -161,5 +176,6 @@ bool CurrentApp::Update() {
 
 	player.Update(elapsed);
 	
+	enemies.update(elapsed);
     return core->updateAndRender();
 }

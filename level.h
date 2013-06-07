@@ -66,8 +66,9 @@ class Level
 	
 		bool isIn(const Vector3 & pos)
 		{
-			Vector3 obPos = obj->getPosition();
-			return (  pos.z > obPos.z + length ) && ( pos.z < obPos.z ) ;
+			Vector3 obPos = obj->getPosition(); 
+			std::cout<< obPos.z << " - " <<obPos.z+length <<" , "<< pos.z <<std::endl;
+			return (  pos.z >= obPos.z ) && ( pos.z <= obPos.z + length ) ;
 		}
 
 		~Level()
