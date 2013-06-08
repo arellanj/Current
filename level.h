@@ -5,7 +5,7 @@ using namespace Polycode;
 class Level
 {
 	private:
-		CollisionSceneEntity * obj;
+		SceneEntity * obj;
 		double Pressure;
 		double Area;
 		double length;
@@ -26,18 +26,18 @@ class Level
 			
 			Vector3 Color = Vector3( (rand() % 255 ) / 255.0, ( rand() % 255 ) / 255.0, ( rand() % 255 ) / 255.0 );
 
-			SceneEntity * ob = new SceneEntity();
-			ob->setPosition(pos);
-			ob->Scale(size,10,length);
+			obj = new SceneEntity();
+			obj->setPosition(pos);
+			obj->Scale(size,10,length);
 
 			ScenePrimitive *floor = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1.1,0.1,1);
 			ScenePrimitive *lwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1,0.1,1);
 			ScenePrimitive *rwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1,0.1,1);
 			ScenePrimitive *ceil = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1.1,0.1,1);
-			ob->addChild(floor);
-			ob->addChild(lwall);
-			ob->addChild(rwall);
-			ob->addChild(ceil);
+			obj->addChild(floor);
+			obj->addChild(lwall);
+			obj->addChild(rwall);
+			obj->addChild(ceil);
 
 			floor->setPosition(Vector3( 0,-.5, 0.5) );
 			floor->setMaterialByName("GroundMaterial");
@@ -68,8 +68,9 @@ class Level
 			scene->addLight(light);
 
 			
-			obj = new CollisionSceneEntity(ob,CollisionSceneEntity::SHAPE_MESH,true);
-			scene->addCollisionChild(obj);
+			//obj = new CollisionSceneEntity(ob,CollisionSceneEntity::SHAPE_BOX,true);
+
+			scene->addCollisionChild(obj, CollisionSceneEntity::SHAPE_BOX,true);
 		}
 
 		double getspeed(  )
