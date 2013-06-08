@@ -15,7 +15,7 @@ Player::Player( ScenePrimitive * obj)
 void Player::Load(Scene* scene, Screen * screen)
 {
 	cam = scene->getDefaultCamera();
-	cam -> setPosition(Vector3(-70,0,0));
+	cam -> setPosition(Vector3(0,0,15));
 	cam -> lookAt(obj->getPosition());
 	spotlight = new SceneLight(SceneLight::SPOT_LIGHT, scene, 33, .2, .5, .05);
 	spotlight->setSpotlightProperties(20,6);
@@ -64,8 +64,9 @@ void Player::Update(Number elapsed)
 	obj->Translate(vel*elapsed);
 	obj->setYaw(obj->getYaw()+100*elapsed);
 	
-	cam-> Translate(0,0, vel.z*elapsed);
+	//cam-> Translate(0,0, vel.z*elapsed);
 	//cam->lookAt(obj->getPosition());
+	cam->setPositionZ(obj->getPosition().z + 10);
 	spotlight->setPosition( cam -> getPosition() );
 	spotlight->lookAt( obj->getPosition() );
 }

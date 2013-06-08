@@ -9,16 +9,16 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	CoreServices::getInstance()->getResourceManager()->addDirResource("Resources", false);
 
 
-	//CollisionScene *scene = new CollisionScene();
-	PhysicsScene * physScene = new PhysicsScene();
+	scene = new CollisionScene();
+	//PhysicsScene * physScene = new PhysicsScene();
 	ScenePrimitive * obj = new ScenePrimitive( ScenePrimitive::TYPE_SPHERE, 0.5, 10,10);
 	obj->setPosition(Vector3(0.0, 0.0, 0.0));
 	obj->setMaterialByName("CubeMaterial");
 	//obj->loadTexture("Resources/pink_texture.png");
 	//scene->addCollisionChild(obj);
-	physScene->addPhysicsChild(obj,PhysicsSceneEntity::SHAPE_SPHERE,1.0);
+	//physScene->addPhysicsChild(obj,PhysicsSceneEntity::SHAPE_SPHERE,1.0);
 
-	scene->addCollisionChild(obj);
+	//scene->addCollisionChild(obj);
 /*
 	ScenePrimitive * ground = new ScenePrimitive(ScenePrimitive::TYPE_PLANE,10,1000);
 	ground->setMaterialByName("GroundMaterial");
@@ -54,14 +54,16 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	scene->addEntity(ceiling);
 */
 		double next_pos = 0;
+		enemies = EnemyManager(scene);
 	for(int i = 0; i < 50 ; i++)
 	{
 		int size = ( rand() % 10 ) +6;
 		int length = ( rand() % 40) +10;
-		std::cout<<"MADE: "<<size<<" , "<<length<<" at :" << next_pos + length<< std::endl;
+		//std::cout<<"MADE: "<<size<<" , "<<length<<" at :" << next_pos + length<< std::endl;
 		next_pos += length;
 		Level * newlevel = new Level(size,length, Vector3(0,0,-next_pos), 10000, scene);
 		path.push_back(newlevel);
+		enemies.addEnemy(newlevel->enemies);//add enemies to enemy manager		
 	}
 
 //	SceneLight * light = new SceneLight ( SceneLight:: SPOT_LIGHT, scene, 33 );
@@ -80,20 +82,20 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	hud->addChild(d_pressed);
 
 	player = Player(obj);
+	scene->addCollisionChild(obj);
 
 	core->getInput()->addEventListener(this, InputEvent::EVENT_KEYDOWN);
 	core->getInput()->addEventListener(this, InputEvent::EVENT_KEYUP);
 	
+	Enemy e = Enemy(COLUMN,Vector3(0,0,-20),5);
+	enemies.addEnemy(e);
+	scene->addCollisionChild(e.getBox());
+
 	//player.Load(scene, hud);
-	physScene->addPhysicsChild(obj, PhysicsSceneEntity::SHAPE_SPHERE, 1.0);
-	player.Load(physScene, hud);
+	//physScene->addPhysicsChild(obj, PhysicsSceneEntity::SHAPE_SPHERE, 1.0);
+	player.Load(scene, hud);
 	
-	
-	enemies = EnemyManager(physScene);
-	
-	enemies.addEnemy(Enemy(COLUMN,Vector3(1.5,0,-50),10));
-	enemies.addEnemy(Enemy(SEAWEED,Vector3(-1.5,5,-50)));
-	enemies.addEnemy(Enemy(SHARK,Vector3(1,0,-75),5));
+
 }
 
 CurrentApp::~CurrentApp() {
@@ -161,13 +163,14 @@ void CurrentApp::handleEvent(Event *e)
 
 bool CurrentApp::Update() {
 	Number elapsed = core->getElapsed();
+	
 	for ( int i  = 0 ; i < 50 ; i++ )
 	{
-		std::cout<< player.getPosition().z <<std:: endl;
+		//std::cout<< player.getPosition().z <<std:: endl;
 		Vector3 position = player.getPosition();
 		if( path[i]->isIn(position) && i != player.levelPos)
 		{
-			std::cout<< "Player is now in: "<< i<<std::endl;
+			//std::cout<< "Player is now in: "<< i<<std::endl;
 			player.levelPos = i;
 			player.setMaxSpeed( path[i]->getspeed());
 			break;
@@ -175,6 +178,9 @@ bool CurrentApp::Update() {
 	}
 
 	player.Update(elapsed);
+	
+	//path[player.levelPos]->collideUpdate(player);
+
 	
 	enemies.update(elapsed);
     return core->updateAndRender();

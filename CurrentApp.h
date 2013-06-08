@@ -2,10 +2,11 @@
 #include "PolycodeView.h"
 #include "Polycode3DPhysics.h"
 #include "player.h"
+#include "EnemyManager.cpp"
 #include "level.h"
 #include <vector>
 #include <iostream>
-#include "EnemyManager.cpp"
+
 
 using namespace std;
 using namespace Polycode;
@@ -19,6 +20,7 @@ public:
 private:
 	Core *core;
 	Player player;
+	CollisionScene *scene;
 	EnemyManager enemies;
 	std::vector<Level*>path;
 	ScreenLabel *keys_pressed, *a_pressed, *d_pressed;

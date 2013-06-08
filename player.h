@@ -10,13 +10,14 @@ using namespace Polycode;
 class Player
 {
 	private:
-		ScenePrimitive * obj;
+		
 		Camera * cam;
 		SceneLight * spotlight;
 		ScreenLabel * timer;
 		Number minutes,seconds,milliseconds;
 		double maxSpeed;
 	public:
+		ScenePrimitive * obj;
 		int levelPos;
 		Vector3 accl;
 		Vector3 vel;
