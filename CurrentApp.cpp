@@ -8,7 +8,6 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	CoreServices::getInstance()->getResourceManager()->addDirResource("default", false);
 	CoreServices::getInstance()->getResourceManager()->addDirResource("Resources", false);
 
-
 	scene = new CollisionScene();
 	//PhysicsScene * physScene = new PhysicsScene();
 	ScenePrimitive * obj = new ScenePrimitive( ScenePrimitive::TYPE_SPHERE, 0.5, 10,10);
@@ -16,7 +15,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	obj->setMaterialByName("CubeMaterial");
 	//obj->loadTexture("Resources/pink_texture.png");
 	//scene->addCollisionChild(obj);
-	//physScene->addPhysicsChild(obj,PhysicsSceneEntity::SHAPE_SPHERE,1.0);
+
 
 	//scene->addCollisionChild(obj);
 /*
@@ -61,7 +60,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 		int length = ( rand() % 40) +10;
 		//std::cout<<"MADE: "<<size<<" , "<<length<<" at :" << next_pos + length<< std::endl;
 		next_pos += length;
-		Level * newlevel = new Level(size,length, Vector3(0,0,-next_pos), 10000, scene);
+		Level * newlevel = new Level(size,length, Vector3(0,0,-next_pos), 8000, scene);
 		path.push_back(newlevel);
 		enemies.addEnemy(newlevel->enemies);//add enemies to enemy manager		
 	}
@@ -95,7 +94,6 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	//physScene->addPhysicsChild(obj, PhysicsSceneEntity::SHAPE_SPHERE, 1.0);
 	player.Load(scene, hud);
 	
-
 }
 
 CurrentApp::~CurrentApp() {
