@@ -4,7 +4,8 @@ using namespace Polycode;
 
 class Level
 {
-	private:
+	public:
+	//private:
 		SceneEntity * obj;
 		double Pressure;
 		double Area;
@@ -16,7 +17,7 @@ class Level
 		
 		
 		
-	public:
+	//public:
 		vector<Enemy> enemies;
 		CollisionScene * scene;
 		
@@ -74,10 +75,10 @@ class Level
 			rwall->Translate(pos);
 			ceil->Translate(pos);
 
-			scene->addCollisionChild(floor);
-			scene->addCollisionChild(lwall);
-			scene->addCollisionChild(rwall);
-			scene->addCollisionChild(ceil);
+			scene->addCollisionChild(floor,CollisionSceneEntity::SHAPE_BOX);
+			scene->addCollisionChild(lwall,CollisionSceneEntity::SHAPE_BOX);
+			scene->addCollisionChild(rwall,CollisionSceneEntity::SHAPE_BOX);
+			scene->addCollisionChild(ceil,CollisionSceneEntity::SHAPE_BOX);
 
 			SceneLight * light = new SceneLight(SceneLight::AREA_LIGHT, scene,  33);
 			light->setPosition(pos);
