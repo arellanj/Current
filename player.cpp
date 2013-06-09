@@ -15,7 +15,7 @@ Player::Player( ScenePrimitive * obj)
 void Player::Load(Scene* scene, Screen * screen)
 {
 	cam = scene->getDefaultCamera();
-	cam -> setPosition(Vector3(0,0,15));
+	cam -> setPosition(Vector3(15,15,15));
 	//cam -> setPosition(Vector3(-70,0,0));
 	cam -> lookAt(obj->getPosition());
 	spotlight = new SceneLight(SceneLight::SPOT_LIGHT, scene, 33, .2, .5, .05);

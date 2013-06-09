@@ -41,7 +41,14 @@ class Level
 			//lwall->Scale(10,size,length);
 			//rwall->Scale(10,size,length);
 			//ceil->Scale(size,10,length);			
-			
+		
+
+			Enemy e(COLUMN,Vector3(0,0,0),5);
+			e.getBox()->Translate(pos);
+			enemies.push_back(e);
+			scene->addCollisionChild(e.getBox());	
+
+
 			floor->setPosition(Vector3( 0,-.5*10, 0.5*length) );
 			floor->setMaterialByName("GroundMaterial");
 			//floor->loadTexture("Resources/green_texture.png");
@@ -49,8 +56,10 @@ class Level
 
 			rwall->Roll(90);
 			rwall->setPosition(Vector3( 0.5*size,0,0.5*length ) );
-			rwall->setMaterialByName("GroundMaterial");
-			//rwall->loadTexture("Resources/green_texture.png");
+			//rwall->setMaterialByName("GroundMaterial");
+			//rwall->visible = false;
+			rwall->setColor(1,1,1,.3);
+			rwall->loadTexture("Resources/green_texture.png");
 			//rwall->setColor(Color.x,Color.y,Color.z, 1);
 
 			lwall->Roll(-90);
@@ -61,8 +70,10 @@ class Level
 			
 			ceil->Roll(180);
 			ceil->setPosition(Vector3 ( 0,.5*10,0.5*length) );
-			ceil->setMaterialByName("GroundMaterial");
-			//ceil->loadTexture("Resources/green_texture.png");
+			//ceil->setMaterialByName("GroundMaterial");
+			ceil->setColor(1,1,1,.3);
+			//ceil->visible = false;
+			ceil->loadTexture("Resources/green_texture.png");
 			//ceil->setColor(Color.x,Color.y,Color.z, 1);
 
 
@@ -79,11 +90,6 @@ class Level
 			SceneLight * light = new SceneLight(SceneLight::AREA_LIGHT, scene,  33);
 			light->setPosition(pos);
 			scene->addLight(light);
-
-			Enemy e(COLUMN,Vector3(0,0,0),5);
-			e.getBox()->Translate(pos);
-			enemies.push_back(e);
-			scene->addCollisionChild(e.getBox());
 			
 			//obj = new CollisionSceneEntity(ob,CollisionSceneEntity::SHAPE_BOX,true);
 

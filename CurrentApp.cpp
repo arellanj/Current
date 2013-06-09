@@ -52,6 +52,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 
 	scene->addEntity(ceiling);
 */
+	scene->addCollisionChild(obj);
 		double next_pos = 0;
 		enemies = EnemyManager(scene);
 	for(int i = 0; i < 50 ; i++)
@@ -81,7 +82,6 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	hud->addChild(d_pressed);
 
 	player = Player(obj);
-	scene->addCollisionChild(obj);
 
 	core->getInput()->addEventListener(this, InputEvent::EVENT_KEYDOWN);
 	core->getInput()->addEventListener(this, InputEvent::EVENT_KEYUP);
