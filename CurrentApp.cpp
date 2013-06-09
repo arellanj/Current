@@ -86,9 +86,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	core->getInput()->addEventListener(this, InputEvent::EVENT_KEYDOWN);
 	core->getInput()->addEventListener(this, InputEvent::EVENT_KEYUP);
 	
-	Enemy e(COLUMN,Vector3(0,0,-20),5);
-	enemies.addEnemy(e);
-	scene->addCollisionChild(e.getBox());
+
 
 	//player.Load(scene, hud);
 	//physScene->addPhysicsChild(obj, PhysicsSceneEntity::SHAPE_SPHERE, 1.0);
@@ -178,12 +176,14 @@ bool CurrentApp::Update() {
 	}
 	
 	path[player.levelPos]->collideUpdate(player);
+	/*
 	CollisionResult cr = scene->testCollision(enemies.enemies[0].getBox(), player.obj);
 	std::cout<<cr.collided<<" "<<std::endl;
 	if(cr.collided)
 	{
 		player.vel.z = .1;
 	}
+	*/
 
 	enemies.update(elapsed);
     return core->updateAndRender();

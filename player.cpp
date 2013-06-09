@@ -61,7 +61,7 @@ void Player::Update(Number elapsed)
 	{
 		vel.z = -maxSpeed;
 	}
-	std::cout<<"speed: "<<vel.z<<std::endl;
+	//std::cout<<"speed: "<<vel.z<<std::endl;
 	obj->Translate(vel*elapsed);
 	obj->setYaw(obj->getYaw()+100*elapsed);
 	

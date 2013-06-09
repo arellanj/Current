@@ -80,6 +80,10 @@ class Level
 			light->setPosition(pos);
 			scene->addLight(light);
 
+			Enemy e(COLUMN,Vector3(0,0,0),5);
+			e.getBox()->Translate(pos);
+			enemies.push_back(e);
+			scene->addCollisionChild(e.getBox());
 			
 			//obj = new CollisionSceneEntity(ob,CollisionSceneEntity::SHAPE_BOX,true);
 
@@ -105,16 +109,21 @@ class Level
 			v.push_back(scene->testCollision(ceil, player.obj));
 
 	//		v.push_back(scene->testCollision(obj, player.obj));
-		//	v.push_back(scene->testCollision(enemies[0].getBox(), player.obj));
+			v.push_back(scene->testCollision(enemies[0].getBox(), player.obj));
 			//for every enemy, push back collision result
 			
 			for(int i = 0;i<v.size();i++)
 			{
 				CollisionResult cr = v[i];
-				std::cout<<cr.collided<<" "<<std::endl;
+				//std::cout<<cr.collided<<" "<<std::endl;
 				if(cr.collided)
 				{
-					player.vel.z = .1;
+					Vector3 mv = cr.colNormal * cr.colDist;
+					player.translate(mv.x,mv.y,mv.z);
+					if(cr.colNormal.dot(player.vel) < 0)
+						break;
+					player.vel = (cr.colNormal*cr.colNormal.dot(player.vel)*-2 + player.vel) * .5;
+					std::cout<<player.vel.x<<" "<<player.vel.y<<" "<<std::endl;
 				}
 			}
 			
