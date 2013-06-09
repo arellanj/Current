@@ -9,16 +9,16 @@ class Level
 		double Pressure;
 		double Area;
 		double length;
-		ScenePrimitive * floor;
-		ScenePrimitive * lwall;
-		ScenePrimitive * rwall;
-		ScenePrimitive * ceil;
 		
 		
 		
 	public:
 		vector<Enemy> enemies;
 		CollisionScene * scene;
+		ScenePrimitive * floor;
+		ScenePrimitive * lwall;
+		ScenePrimitive * rwall;
+		ScenePrimitive * ceil;
 		
 		Level(int size, int length, Vector3 pos, int pressure, CollisionScene * scene)
 			:pos(pos), Area(size*size),length(length), Pressure(pressure), scene(scene)
@@ -27,20 +27,20 @@ class Level
 			Vector3 Color = Vector3( (rand() % 255 ) / 255.0, ( rand() % 255 ) / 255.0, ( rand() % 255 ) / 255.0 );
 
 				
-			floor = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1.1,0.1,1);
-			lwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1,0.1,1);
-			rwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1,0.1,1);
-			ceil = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1.1,0.1,1);
+			floor = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1.1*size,0.1*10,1*length);
+			lwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*10,0.1*size,1*length);
+			rwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*10,0.1*size,1*length);
+			ceil = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1.1*size,0.1*10,1*length);
 			//obj->addChild(floor);
 			//obj->addChild(lwall);
 			//obj->addChild(rwall);
 			//obj->addChild(ceil);
 
 
-			floor->Scale(size,10,length);
-			lwall->Scale(10,size,length);
-			rwall->Scale(10,size,length);
-			ceil->Scale(size,10,length);			
+			//floor->Scale(size,10,length);
+			//lwall->Scale(10,size,length);
+			//rwall->Scale(10,size,length);
+			//ceil->Scale(size,10,length);			
 			
 			floor->setPosition(Vector3( 0,-.5*10, 0.5*length) );
 			floor->setMaterialByName("GroundMaterial");
@@ -71,10 +71,10 @@ class Level
 			rwall->Translate(pos);
 			ceil->Translate(pos);
 
-			scene->addCollisionChild(floor);
-			scene->addCollisionChild(lwall);
-			scene->addCollisionChild(rwall);
-			scene->addCollisionChild(ceil);
+			scene->addCollisionChild(floor,CollisionSceneEntity::SHAPE_BOX);
+			scene->addCollisionChild(lwall,CollisionSceneEntity::SHAPE_BOX);
+			scene->addCollisionChild(rwall,CollisionSceneEntity::SHAPE_BOX);
+			scene->addCollisionChild(ceil,CollisionSceneEntity::SHAPE_BOX);
 
 			SceneLight * light = new SceneLight(SceneLight::AREA_LIGHT, scene,  33);
 			light->setPosition(pos);
@@ -103,6 +103,7 @@ class Level
 			v.push_back(scene->testCollision(lwall, player.obj));
 			v.push_back(scene->testCollision(rwall, player.obj));
 			v.push_back(scene->testCollision(ceil, player.obj));
+
 	//		v.push_back(scene->testCollision(obj, player.obj));
 		//	v.push_back(scene->testCollision(enemies[0].getBox(), player.obj));
 			//for every enemy, push back collision result
@@ -117,6 +118,7 @@ class Level
 				}
 			}
 			
+
 			//player.move
 		}
 		
