@@ -30,38 +30,54 @@ class Level
 			obj->setPosition(pos);
 			obj->Scale(size,10,length);
 
-			ScenePrimitive *floor = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1.1,0.1,1);
-			ScenePrimitive *lwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1,0.1,1);
-			ScenePrimitive *rwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1,0.1,1);
-			ScenePrimitive *ceil = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1.1,0.1,1);
-			obj->addChild(floor);
-			obj->addChild(lwall);
-			obj->addChild(rwall);
-			obj->addChild(ceil);
+			floor = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1.1,0.1,1);
+			lwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1,0.1,1);
+			rwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1,0.1,1);
+			ceil = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1.1,0.1,1);
+			//obj->addChild(floor);
+			//obj->addChild(lwall);
+			//obj->addChild(rwall);
+			//obj->addChild(ceil);
 
-			floor->setPosition(Vector3( 0,-.5, 0.5) );
+
+			floor->Scale(size,10,length);
+			lwall->Scale(10,size,length);
+			rwall->Scale(10,size,length);
+			ceil->Scale(size,10,length);			
+			
+			floor->setPosition(Vector3( 0,-.5*10, 0.5*length) );
 			floor->setMaterialByName("GroundMaterial");
 			//floor->loadTexture("Resources/green_texture.png");
 			//floor->setColor(Color.x,Color.y,Color.z, 1);
 
 			rwall->Roll(90);
-			rwall->setPosition(Vector3( 0.5,0,0.5 ) );
+			rwall->setPosition(Vector3( 0.5*size,0,0.5*length ) );
 			rwall->setMaterialByName("GroundMaterial");
 			//rwall->loadTexture("Resources/green_texture.png");
 			//rwall->setColor(Color.x,Color.y,Color.z, 1);
 
 			lwall->Roll(-90);
-			lwall->setPosition(Vector3 ( -0.5,0,0.5 ) );
+			lwall->setPosition(Vector3 ( -0.5*size,0,0.5*length ) );
 			lwall->setMaterialByName("GroundMaterial");
 			//lwall->loadTexture("Resources/green_texture.png");
 			//lwall->setColor(Color.x,Color.y,Color.z, 1);
 			
 			ceil->Roll(180);
-			ceil->setPosition(Vector3 ( 0,.5,0.5));
+			ceil->setPosition(Vector3 ( 0,.5*10,0.5*length) );
 			ceil->setMaterialByName("GroundMaterial");
 			//ceil->loadTexture("Resources/green_texture.png");
 			//ceil->setColor(Color.x,Color.y,Color.z, 1);
 
+
+			floor->Translate(pos);
+			lwall->Translate(pos);
+			rwall->Translate(pos);
+			ceil->Translate(pos);
+
+			scene->addCollisionChild(floor);
+			scene->addCollisionChild(lwall);
+			scene->addCollisionChild(rwall);
+			scene->addCollisionChild(ceil);
 
 			SceneLight * light = new SceneLight(SceneLight::AREA_LIGHT, scene,  33);
 			light->setPosition(pos);
@@ -70,7 +86,7 @@ class Level
 			
 			//obj = new CollisionSceneEntity(ob,CollisionSceneEntity::SHAPE_BOX,true);
 
-			scene->addCollisionChild(obj, CollisionSceneEntity::SHAPE_BOX,true);
+		//	scene->addCollisionChild(obj, CollisionSceneEntity::SHAPE_BOX,true);
 		}
 
 		double getspeed(  )
@@ -92,8 +108,8 @@ class Level
 			v.push_back(scene->testCollision(lwall, player.obj));
 			v.push_back(scene->testCollision(rwall, player.obj));
 			v.push_back(scene->testCollision(ceil, player.obj));
-			v.push_back(scene->testCollision(obj, player.obj));
-			v.push_back(scene->testCollision(enemies[0].getBox(), player.obj));
+	//		v.push_back(scene->testCollision(obj, player.obj));
+		//	v.push_back(scene->testCollision(enemies[0].getBox(), player.obj));
 			//for every enemy, push back collision result
 			
 			for(int i = 0;i<v.size();i++)

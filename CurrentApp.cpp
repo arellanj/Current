@@ -86,9 +86,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	core->getInput()->addEventListener(this, InputEvent::EVENT_KEYDOWN);
 	core->getInput()->addEventListener(this, InputEvent::EVENT_KEYUP);
 	
-	Enemy e = Enemy(COLUMN,Vector3(0,0,-20),5);
-	enemies.addEnemy(e);
-	scene->addCollisionChild(e.getBox());
+
 
 	//player.Load(scene, hud);
 	//physScene->addPhysicsChild(obj, PhysicsSceneEntity::SHAPE_SPHERE, 1.0);
@@ -162,6 +160,7 @@ void CurrentApp::handleEvent(Event *e)
 bool CurrentApp::Update() {
 	Number elapsed = core->getElapsed();
 	
+	player.Update(elapsed);
 	for ( int i  = 0 ; i < 50 ; i++ )
 	{
 		//std::cout<< player.getPosition().z <<std:: endl;
@@ -173,12 +172,9 @@ bool CurrentApp::Update() {
 			player.setMaxSpeed( path[i]->getspeed());
 			break;
 		}
+		
+		path[i]->collideUpdate(player);
 	}
-
-	player.Update(elapsed);
-	
-	//path[player.levelPos]->collideUpdate(player);
-
 	
 	enemies.update(elapsed);
     return core->updateAndRender();
