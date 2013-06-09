@@ -5,7 +5,7 @@ using namespace Polycode;
 class Level
 {
 	private:
-		SceneEntity * obj;
+		Vector3 pos;
 		double Pressure;
 		double Area;
 		double length;
@@ -21,15 +21,12 @@ class Level
 		CollisionScene * scene;
 		
 		Level(int size, int length, Vector3 pos, int pressure, CollisionScene * scene)
-			: Area(size*size),length(length), Pressure(pressure), scene(scene)
+			:pos(pos), Area(size*size),length(length), Pressure(pressure), scene(scene)
 		{
 			
 			Vector3 Color = Vector3( (rand() % 255 ) / 255.0, ( rand() % 255 ) / 255.0, ( rand() % 255 ) / 255.0 );
 
-			obj = new SceneEntity();
-			obj->setPosition(pos);
-			obj->Scale(size,10,length);
-
+				
 			floor = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1.1,0.1,1);
 			lwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1,0.1,1);
 			rwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1,0.1,1);
@@ -96,12 +93,10 @@ class Level
 	
 		bool isIn(const Vector3 & pos)
 		{
-			Vector3 obPos = obj->getPosition(); 
-			//std::cout<< obPos.z << " - " <<obPos.z+length <<" , "<< pos.z <<std::endl;
-			return (  pos.z >= obPos.z ) && ( pos.z <= obPos.z + length ) ;
+			return (  pos.z >= this->pos.z ) && ( pos.z <= this->pos.z + length ) ;
 		}
 		
-		void collideUpdate(Player player)
+		void collideUpdate(Player &  player)
 		{
 			vector<CollisionResult> v;
 			v.push_back(scene->testCollision(floor, player.obj));

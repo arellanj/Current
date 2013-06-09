@@ -173,9 +173,9 @@ bool CurrentApp::Update() {
 			break;
 		}
 		
-		path[i]->collideUpdate(player);
 	}
 	
+	path[player.levelPos]->collideUpdate(player);
 	enemies.update(elapsed);
     return core->updateAndRender();
 }
