@@ -116,6 +116,7 @@ class Level
 
 	//		v.push_back(scene->testCollision(obj, player.obj));
 			v.push_back(scene->testCollision(enemies[0].getBox(), player.obj));
+			
 			//for every enemy, push back collision result
 			
 			for(int i = 0;i<v.size();i++)
@@ -124,11 +125,13 @@ class Level
 				//std::cout<<cr.collided<<" "<<std::endl;
 				if(cr.collided)
 				{
-					Vector3 mv = cr.colNormal * cr.colDist;
-					player.translate(mv.x,mv.y,mv.z);
-					if(cr.colNormal.dot(player.vel) < 0)
+					if(cr.colNormal.dot(player.vel) > 0)
 						break;
-					player.vel = (cr.colNormal*cr.colNormal.dot(player.vel)*-2 + player.vel) * .5;
+
+					Vector3 mv = cr.colNormal *cr.colDist;
+					player.translate(mv.x,mv.y,mv.z);
+
+					player.vel = (cr.colNormal*player.vel.dot(cr.colNormal)*-2 + player.vel)* 0.5;
 					std::cout<<player.vel.x<<" "<<player.vel.y<<" "<<std::endl;
 				}
 			}
