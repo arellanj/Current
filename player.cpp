@@ -1,7 +1,7 @@
 #include "player.h"
 
 Player::Player( ScenePrimitive * obj)
-	:obj(obj), cam(NULL), spotlight(NULL), timer(NULL)
+	:obj(obj), cam(NULL), spotlight(NULL), timer(NULL), coins(0)
 {
 	vel = Vector3(0,0,0);
 	accl = Vector3(0,0,-1);

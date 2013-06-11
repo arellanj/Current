@@ -17,6 +17,7 @@ class Player
 		Number minutes,seconds,milliseconds;
 		double maxSpeed;
 	public:
+		Number coins;
 		ScenePrimitive * obj;
 		int levelPos;
 		Vector3 accl;
