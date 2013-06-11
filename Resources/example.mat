@@ -21,6 +21,13 @@
 					<texture name="diffuse">Resources/blue_texture.png</texture>
 				</textures>
 			</shader>
-		</material>					
+		</material>			
+		<material name="GreenMaterial">
+			<shader name="DefaultShaderShadows">
+				<textures>
+					<texture name="diffuse">Resources/green_texture.png</texture>
+				</textures>
+			</shader>
+		</material>		
 	</materials>
 </polycode>

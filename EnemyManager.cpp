@@ -31,9 +31,9 @@ public:
 		return enemies[i];
 	}
 	
-	void update(Number elapsed){
+	void update(Number elapsed, Number dist){
 		for(int i = 0;i<enemies.size();i++)
-			enemies[i].update(elapsed);
+			enemies[i].update(elapsed, dist);
 	}
     
     vector <Enemy> enemies;

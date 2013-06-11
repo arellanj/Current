@@ -9,9 +9,7 @@ class Level
 		double Pressure;
 		double Area;
 		double length;
-		
-		
-		
+				
 	public:
 		vector<Enemy> enemies;
 		CollisionScene * scene;
@@ -34,27 +32,22 @@ class Level
 			lblind = new ScenePrimitive(ScenePrimitive::TYPE_PLANE, 6,10);
 			rblind = new ScenePrimitive(ScenePrimitive::TYPE_PLANE, 6,10);
 
-			//Enemy e(COLUMN,Vector3(0,0,0),5);
-			//e.getBox()->Translate(pos);
-			//enemies.push_back(e);
-			//scene->addCollisionChild(e.getBox());
-
-			Enemy e(SEAWEED,Vector3(0,0,rand()%length),0,size);
+			// one enemy
+			/*
+			Enemy e(COIN,Vector3(0,0,rand()%length),0,size);
 			e.getBox()->Translate(pos);
 			enemies.push_back(e);
 			scene->addCollisionChild(e.getBox());	
+			*/
 			
-			/*
-			for(int i = 0;i<length % 10;i++)
+			for(int i = 0;i<length/10;i++)
 			{
-				Enemy e(SHARK,Vector3(0,0,i ),0,size);
+				Enemy e(static_cast<EnemyType>(rand() % 4),Vector3(0,0,i*10 ),0,size);
 				e.getBox()->Translate(pos);
 				enemies.push_back(e);
 				scene->addCollisionChild(e.getBox());	
 			}
-			*/
-
-
+			
 			floor->setPosition(Vector3( 0,-.5*10, 0.5*length) );
 			floor->setMaterialByName("GroundMaterial");
 
@@ -142,7 +135,8 @@ class Level
 					Vector3 negZ = Vector3(0,0,-1);
 					Vector3 perpen = mv.crossProduct(negZ);
 					player.vel = negZ * player.vel.dot(negZ) + perpen * player.vel.dot(perpen);
-					std::cout<<player.vel.x<<" "<<player.vel.y<<" "<<std::endl;				}
+					//std::cout<<player.vel.x<<" "<<player.vel.y<<" "<<std::endl;				
+				}
 			}
 			
 			for(int i = 0;i<enemies.size();i++)
@@ -161,12 +155,15 @@ class Level
 					}
 					else if(enemies[i].getType() == SEAWEED)
 					{
-						player.vel = player.vel * 0.5;
+						player.vel = player.vel * 0.9;
 					}
-					//else(enemies[i].getType() == COIN)
-					//{
-						//increase coin count
-					//} 
+					else if(enemies[i].getType() == COIN)
+					{
+						if(!(enemies[i].getVisible()))
+							break;
+						player.coins++;//increase coin count
+						enemies[i].setVisible(false);
+					} 
 				}
 			}
 			

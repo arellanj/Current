@@ -191,6 +191,6 @@ bool CurrentApp::Update() {
 	}
 	*/
 
-	enemies.update(elapsed);
+	enemies.update(elapsed, player.getPosition().z);
     return core->updateAndRender();
 }
