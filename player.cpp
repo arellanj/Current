@@ -15,7 +15,7 @@ Player::Player( ScenePrimitive * obj)
 void Player::Load(Scene* scene, Screen * screen)
 {
 	cam = scene->getDefaultCamera();
-	cam -> setPosition(Vector3(15,15,15));
+	cam -> setPosition(Vector3(1,2,17));
 	//cam -> setPosition(Vector3(-70,0,0));
 	cam -> lookAt(obj->getPosition());
 	spotlight = new SceneLight(SceneLight::SPOT_LIGHT, scene, 33, .2, .5, .05);
@@ -56,7 +56,7 @@ void Player::Update(Number elapsed)
 	}
 	//std::cout<<"Timer:"<<minutes<<":"<<seconds<<":"<<milliseconds<<std::endl;
 	vel += accl*elapsed;
-	accl.z = (vel.z-maxSpeed)*elapsed;
+	accl.z = (vel.z-maxSpeed)*1.5*elapsed;
 	if(vel.z < -maxSpeed)
 	{
 		vel.z = -maxSpeed;
@@ -67,7 +67,7 @@ void Player::Update(Number elapsed)
 	
 	//cam-> Translate(0,0, vel.z*elapsed);
 	//cam->lookAt(obj->getPosition());
-	cam->setPositionZ(obj->getPosition().z + 10);
+	cam->setPositionZ(obj->getPosition().z + 15);
 	spotlight->setPosition( cam -> getPosition() );
 	spotlight->lookAt( obj->getPosition() );
 }

@@ -55,10 +55,16 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	scene->addCollisionChild(obj);
 		double next_pos = 0;
 		enemies = EnemyManager(scene);
+		int size = 5;
 	for(int i = 0; i < 50 ; i++)
 	{
-		int size = ( rand() % 10 ) +6;
-		int length = ( rand() % 40) +10;
+		//int size = ( rand() % 10 ) +10;
+		size-= 9;
+		if ( size < 6)
+		{
+			size = 20;
+		}
+		int length = ( rand() % 40) +15;
 		//std::cout<<"MADE: "<<size<<" , "<<length<<" at :" << next_pos + length<< std::endl;
 		next_pos += length;
 		Level * newlevel = new Level(size,length, Vector3(0,0,-next_pos), 8000, scene);
@@ -158,7 +164,7 @@ void CurrentApp::handleEvent(Event *e)
 }
 
 bool CurrentApp::Update() {
-	Number elapsed = core->getElapsed();
+	double elapsed = core->getElapsed();
 	
 	player.Update(elapsed);
 	for ( int i  = 0 ; i < 50 ; i++ )
