@@ -59,12 +59,12 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	for(int i = 0; i < 50 ; i++)
 	{
 		//int size = ( rand() % 10 ) +10;
-		size-= 9;
+		size-= 2;
 		if ( size < 6)
 		{
 			size = 20;
 		}
-		int length = ( rand() % 40) +15;
+		int length = 100 ; //( rand() % 40) +85;
 		//std::cout<<"MADE: "<<size<<" , "<<length<<" at :" << next_pos + length<< std::endl;
 		next_pos += length;
 		Level * newlevel = new Level(size,length, Vector3(0,0,-next_pos), 8000, scene);
@@ -173,7 +173,7 @@ bool CurrentApp::Update() {
 		Vector3 position = player.getPosition();
 		if( path[i]->isIn(position) && i != player.levelPos)
 		{
-			//std::cout<< "Player is now in: "<< i<<std::endl;
+			std::cout<< "Player is now in: "<< i<<std::endl<< "speed ="<< path[i]->getspeed()<<std::endl;
 			player.levelPos = i;
 			player.setMaxSpeed( path[i]->getspeed());
 			break;
