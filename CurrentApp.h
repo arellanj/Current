@@ -2,8 +2,7 @@
 #include "PolycodeView.h"
 #include "Polycode3DPhysics.h"
 #include "player.h"
-#include "EnemyManager.cpp"
-#include "level.h"
+#include "LevelManager.h"
 #include <vector>
 #include <iostream>
 
@@ -20,8 +19,7 @@ private:
 	Core *core;
 	Player player;
 	CollisionScene *scene;
-	EnemyManager enemies;
-	std::vector<Level*>path;
+	LevelManager level;
 	ScreenLabel *keys_pressed, *a_pressed, *d_pressed;
 	void handleEvent(Event *e);
 };

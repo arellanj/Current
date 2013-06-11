@@ -3,6 +3,9 @@
 #include "Polycode3DPhysics.h"
 #include <iostream>
 
+#ifndef __ENEMY_CPP__
+#define __ENEMY_CPP__
+
 using namespace std;
 using namespace Polycode;
 
@@ -110,3 +113,4 @@ private:
 	Number swingValue;
 	
 };
+#endif // __ENEMY_CPP__
