@@ -23,11 +23,9 @@ class Level
 		ScenePrimitive * rblind;
 		
 		Level(int size, int length, Vector3 pos, int pressure, CollisionScene * scene)
-			:pos(pos), Area(size*size),length(length), Pressure(pressure), scene(scene)
-		{
-			
+			:pos(pos), Area(size*10),length(length), Pressure(pressure), scene(scene)
+		{			
 			Vector3 Color = Vector3( (rand() % 255 ) / 255.0, ( rand() % 255 ) / 255.0, ( rand() % 255 ) / 255.0 );
-
 				
 			floor = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1.1*size,0.1*10,1*length);
 			lwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*10,0.1*size,1*length);
@@ -39,31 +37,38 @@ class Level
 			//Enemy e(COLUMN,Vector3(0,0,0),5);
 			//e.getBox()->Translate(pos);
 			//enemies.push_back(e);
-			//scene->addCollisionChild(e.getBox());	
+			//scene->addCollisionChild(e.getBox());
+
+			Enemy e(SEAWEED,Vector3(0,0,rand()%length),0,size);
+			e.getBox()->Translate(pos);
+			enemies.push_back(e);
+			scene->addCollisionChild(e.getBox());	
+			
+			/*
+			for(int i = 0;i<length % 10;i++)
+			{
+				Enemy e(SHARK,Vector3(0,0,i ),0,size);
+				e.getBox()->Translate(pos);
+				enemies.push_back(e);
+				scene->addCollisionChild(e.getBox());	
+			}
+			*/
 
 
 			floor->setPosition(Vector3( 0,-.5*10, 0.5*length) );
 			floor->setMaterialByName("GroundMaterial");
-			//floor->loadTexture("Resources/green_texture.png");
-			//floor->setColor(Color.x,Color.y,Color.z, 1);
 
 			rwall->Roll(90);
 			rwall->setPosition(Vector3( 0.5*size,0,0.5*length ) );
-			//rwall->setMaterialByName("GroundMaterial");
-			//rwall->visible = false;
 			rwall->setColor(1,1,1,.3);
 			rwall->loadTexture("Resources/blue_texture.png");
 			//rwall->setColor(Color.x,Color.y,Color.z, 1);
-
 			lwall->Roll(-90);
 			lwall->setPosition(Vector3 ( -0.5*size,0,0.5*length ) );
 			lwall->setMaterialByName("GroundMaterial");
-			//lwall->loadTexture("Resources/green_texture.png");
-			//lwall->setColor(Color.x,Color.y,Color.z, 1);
 			
 			ceil->Roll(180);
 			ceil->setPosition(Vector3 ( 0,.5*10,0.5*length) );
-			//ceil->setMaterialByName("GroundMaterial");
 			ceil->setColor(1,1,1,.3);
 			//ceil->visible = false;
 			ceil->loadTexture("Resources/blue_texture.png");
@@ -77,7 +82,6 @@ class Level
 			lblind->Pitch(90);
 			lblind->setMaterialByName("GroundMaterial");
 			lblind->setPosition( Vector3( -(3+0.5*size), 0, length+0.01 ) );
-
 			floor->Translate(pos);
 			lwall->Translate(pos);
 			rwall->Translate(pos);
@@ -95,10 +99,6 @@ class Level
 			SceneLight * light = new SceneLight(SceneLight::AREA_LIGHT, scene,  33+ size);
 			light->setPosition(0,0,pos.z + .5*length);
 			scene->addLight(light);
-			
-			//obj = new CollisionSceneEntity(ob,CollisionSceneEntity::SHAPE_BOX,true);
-
-		//	scene->addCollisionChild(obj, CollisionSceneEntity::SHAPE_BOX,true);
 		}
 
 		double getspeed(  )
@@ -113,6 +113,7 @@ class Level
 		
 		void collideUpdate(Player &  player)
 		{
+			// Test Walls
 			vector<CollisionResult> v;
 			v.push_back(scene->testCollision(floor, player.obj));
 			v.push_back(scene->testCollision(lwall, player.obj));
@@ -134,17 +135,42 @@ class Level
 				{
 					if(cr.colNormal.dot(player.vel) > 0)
 						break;
-
-					Vector3 mv = cr.colNormal *-cr.colDist;
+					std::cout<<player.vel.x<<" "<<player.vel.y<<" "<<std::endl;
+					Vector3 mv = cr.colNormal *cr.colDist * -1;
 					player.translate(mv.x,mv.y,mv.z);
-
-					player.vel = (cr.colNormal*player.vel.dot(cr.colNormal)*-2 + player.vel)* 0.5;
-					//std::cout<<player.vel.x<<" "<<player.vel.y<<" "<<std::endl;
+					//player.vel = (cr.colNormal*player.vel.dot(cr.colNormal)*-2 + player.vel)* 0.5;
+					Vector3 negZ = Vector3(0,0,-1);
+					Vector3 perpen = mv.crossProduct(negZ);
+					player.vel = negZ * player.vel.dot(negZ) + perpen * player.vel.dot(perpen);
+					std::cout<<player.vel.x<<" "<<player.vel.y<<" "<<std::endl;				}
+			}
+			
+			for(int i = 0;i<enemies.size();i++)
+			{
+				CollisionResult cr = scene->testCollision(enemies[i].getBox(), player.obj);
+				if(cr.collided)
+				{
+					if(enemies[i].getType() == SHARK || enemies[i].getType() == COLUMN )
+					{
+						if(cr.colNormal.dot(player.vel) > 0)
+							break;
+						Vector3 mv = cr.colNormal *cr.colDist * -1;
+						player.translate(mv.x,mv.y,mv.z);
+						player.vel = (cr.colNormal*player.vel.dot(cr.colNormal)*-2 + player.vel)* 0.5;
+						//std::cout<<player.vel.x<<" "<<player.vel.y<<" "<<std::endl;
+					}
+					else if(enemies[i].getType() == SEAWEED)
+					{
+						player.vel = player.vel * 0.5;
+					}
+					//else(enemies[i].getType() == COIN)
+					//{
+						//increase coin count
+					//} 
 				}
 			}
 			
-
-			//player.move
+			
 		}
 		
 		

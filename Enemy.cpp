@@ -3,11 +3,11 @@
 #include "Polycode3DPhysics.h"
 using namespace Polycode;
 
-enum EnemyType { SHARK, SEAWEED, COLUMN };
+enum EnemyType { SHARK, SEAWEED, COLUMN, COIN };
 
 class Enemy {
 public:
-	Enemy(EnemyType type, Vector3 position, Number height = 1, Number width = 1) : type(type), swingValue(0) {		
+	Enemy(EnemyType type, Vector3 position, Number height, Number width) : type(type), swingValue(0), swingRange(width){		
 		switch(type){
 			case SHARK :
 				box = new ScenePrimitive(ScenePrimitive::TYPE_BOX,1,1,1);
@@ -24,6 +24,10 @@ public:
 			case COLUMN :
 				box = new ScenePrimitive(ScenePrimitive::TYPE_CYLINDER,height,width,10);
 				box->setMaterialByName("GroundMaterial");
+				break;
+			case COIN:
+				box = new ScenePrimitive(ScenePrimitive::TYPE_SPHERE,1,1,.5);
+				box->setMaterialByName("GroundMaterial");
 			default : 
 				break;
 		}		
@@ -31,7 +35,6 @@ public:
 	}
 	
 	void update(Number elapsed){
-		//Shark's swing radius is hardcoded to 4.5 right now
 		if(type == SHARK){
 			swingValue += elapsed;
 			box->setPosition(sin(swingValue) * 4.5,box->getPosition().y,box->getPosition().z);	
@@ -50,9 +53,17 @@ public:
 		return box;
 	}
     
+    Number getSwingRange(){
+		return swingRange;
+	}
+	
+	EnemyType getType(){
+		return type;
+	}
     
 private:
 	EnemyType type;
 	ScenePrimitive * box;
+	Number swingRange;
 	Number swingValue;
 };
