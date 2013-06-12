@@ -8,7 +8,7 @@ default: LevelManager.o player.o CurrentApp.o
 CurrentApp.o: CurrentApp.cpp CurrentApp.h LevelManager.o player.o
 	$(CC) $(CFLAGS) -c CurrentApp.cpp LevelManager.o player.o
 
-LevelManager.o: LevelManager.cpp player.o Enemy.cpp EnemyManager.cpp
+LevelManager.o: LevelManager.cpp player.o Enemy.cpp EnemyManager.cpp level.h
 	$(CC) $(CFLAGS) -c LevelManager.cpp player.o EnemyManager.cpp Enemy.cpp 
 
 player.o: player.cpp player.h

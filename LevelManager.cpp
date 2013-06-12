@@ -3,6 +3,7 @@
 LevelManager::LevelManager()
 :scene(NULL)
 {
+
 }
 
 LevelManager::LevelManager(Number levelNum, CollisionScene * scene)
@@ -11,7 +12,7 @@ LevelManager::LevelManager(Number levelNum, CollisionScene * scene)
   enemies = EnemyManager(scene);
   double next_pos = 0;
   int size = 5;
-  for(int i = 0; i < 50 ; i++)
+  for(int i = 0; i < levelNum ; i++)
 	{
   	  //int size = ( rand() % 10 ) +10;
   	  size-= 2;
@@ -21,10 +22,11 @@ LevelManager::LevelManager(Number levelNum, CollisionScene * scene)
 		}
 	  int length = 100 ; //( rand() % 40) +85;
   	  next_pos += length;
-  	  levels.push_back(new Level(size,length, Vector3(0,0,-next_pos), 8000, scene));
+  	  levels.push_back(new Level(size,length, Vector3(0,0,-next_pos), 4000, scene));
   	  enemies.addEnemy(levels[levels.size()-1]->enemies);//add enemies to enemy manager		
 	}
 }
+
 
 void LevelManager::Update( Number elapsed, Player & player)
 {
@@ -39,7 +41,7 @@ void LevelManager::Update( Number elapsed, Player & player)
 
 
 		  levels[player.levelPos]->addLevelScene();
-	  	  if (player.levelPos < levels.size() )
+	  	  if (player.levelPos < levels.size()-1 )
 	  		{
 		  	  levels[player.levelPos +1 ]->addLevelScene();
 			}
@@ -60,5 +62,8 @@ void LevelManager::Update( Number elapsed, Player & player)
 
 LevelManager::~LevelManager()
 {
-
+	for ( int i =0  ;  i < levels.size() ; i++ )
+	{
+		delete levels[i];
+	}
 }

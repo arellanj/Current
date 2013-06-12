@@ -9,7 +9,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	CoreServices::getInstance()->getResourceManager()->addDirResource("Resources", false);
 
 	scene = new CollisionScene();
-	level = LevelManager(50, scene);
+	level = new LevelManager(50, scene);
 
 	// Creating the Player object
 	ScenePrimitive * obj = new ScenePrimitive( ScenePrimitive::TYPE_SPHERE, 0.5, 10,10);
@@ -18,14 +18,14 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	scene->addCollisionChild(obj);
 
 	Screen *hud = new Screen();
-	keys_pressed = new ScreenLabel("Coins: ",16);
+	keys_pressed = new ScreenLabel("Stats: ",16);
 	hud->addChild(keys_pressed);
-	a_pressed = new ScreenLabel("a:no", 16);
-	a_pressed->setPosition(0,20);
-	d_pressed = new ScreenLabel("d:no", 16);
-	d_pressed->setPosition(0,40);
-	hud->addChild(a_pressed);
-	hud->addChild(d_pressed);
+	coins_hud = new ScreenLabel("Coins: 0", 16);
+	coins_hud->setPosition(0,20);
+	time_hud = new ScreenLabel("Time: 00:00:00", 16);
+	time_hud->setPosition(0,40);
+	hud->addChild(coins_hud);
+	hud->addChild(time_hud);
 
 	player = Player(obj);
 
@@ -38,10 +38,13 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	//physScene->addPhysicsChild(obj, PhysicsSceneEntity::SHAPE_SPHERE, 1.0);
 	player.Load(scene, hud);
 	
+	timer.start();
 }
 
 CurrentApp::~CurrentApp() {
-
+	delete level;
+	delete scene;
+	delete core;
 }
 
 void CurrentApp::handleEvent(Event *e)
@@ -56,18 +59,16 @@ void CurrentApp::handleEvent(Event *e)
 				switch(inputEvent->keyCode())
 				{
 					case KEY_UP:
-						player.accl.y = 4;
+						player.vel.y = 4;
 						break;
 					case KEY_DOWN:
-						player.accl.y = -4;
+						player.vel.y = -4;
 						break;
 					case KEY_LEFT:
-						player.accl.x = -4;
-						a_pressed->setText("a:yes");
+						player.vel.x = -4;
 						break;
 					case KEY_RIGHT:
-						player.accl.x = 4;
-						d_pressed->setText("d:yes");
+						player.vel.x = 4;
 						break;
 					default:
 						break;
@@ -85,17 +86,15 @@ void CurrentApp::handleEvent(Event *e)
 						break;
 					case KEY_LEFT:
 						player.accl.x = 0;
-						a_pressed->setText("a:no");
 						break;
 					case KEY_RIGHT:
 						player.accl.x =0;
-						d_pressed->setText("d:no");
 						break;
 					default:
 						break;
 				}
 				break;
-			default:
+				default:
 				break;
 					
 		}
@@ -106,7 +105,10 @@ void CurrentApp::handleEvent(Event *e)
 bool CurrentApp::Update() {
 	double elapsed = core->getElapsed();
 	
+	timer.Update(elapsed);
 	player.Update(elapsed);
-	level.Update(elapsed, player);
+	coins_hud->setText("Coins: "+ String::IntToString(player.coins));
+	time_hud->setText("Time: " + timer.getTime());
+	level->Update(elapsed, player);
     return core->updateAndRender();
 }

@@ -14,6 +14,7 @@ private:
 	CollisionScene * scene;
 public:
 	LevelManager();
+	LevelManager(const LevelManager & man);
 	LevelManager(Number levelNum, CollisionScene * scene);
 	~LevelManager();
 	void Update( Number elapsed , Player & player);

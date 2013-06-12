@@ -14,7 +14,6 @@ class Player
 		Camera * cam;
 		SceneLight * spotlight;
 		ScreenLabel * timer;
-		Number minutes,seconds,milliseconds;
 		double maxSpeed;
 	public:
 		Number coins;

@@ -154,19 +154,24 @@ class Level
 				{
 					if(enemies[i].getType() == SHARK || enemies[i].getType() == COLUMN )
 					{
-						if(cr.colNormal.dot(player.vel) > 0)
+						if(cr.colNormal.dot(player.vel) < 0)
 							break;
-						Vector3 mv = cr.colNormal *cr.colDist * -1;
+						Vector3 mv = cr.colNormal *cr.colDist *- 1;
+						std::cout<<mv.x<<" "<<mv.y<<" "<<mv.z<<" "<<std::endl;
 						player.translate(mv.x,mv.y,mv.z);
-						player.vel = (cr.colNormal*player.vel.dot(cr.colNormal)*-2 + player.vel)* 0.5;
+						
+						player.vel = ((cr.colNormal*-1)*player.vel.dot(cr.colNormal*-1)*-2 + player.vel)* 0.5;
 						//std::cout<<player.vel.x<<" "<<player.vel.y<<" "<<std::endl;
 					}
 					else if(enemies[i].getType() == SEAWEED)
 					{
-						player.vel = player.vel * 0.9;
+						std::cout<<" SWEEAD"<<std::endl;
+						player.vel = player.vel * 0.7;
 					}
 					else if(enemies[i].getType() == COIN)
 					{
+						std::cout<<" D"<<std::endl;
+						scene->removeEntity(enemies[i].getBox());
 						if(!(enemies[i].getVisible()))
 							break;
 						player.coins++;//increase coin count

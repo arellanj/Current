@@ -5,10 +5,7 @@ Player::Player( ScenePrimitive * obj)
 {
 	vel = Vector3(0,0,0);
 	accl = Vector3(0,0,-1);
-	minutes =0;
-	seconds = 0;
 	levelPos = -1;
-	milliseconds = 0;
 	maxSpeed = 40;
 }
 
@@ -25,7 +22,7 @@ void Player::Load(Scene* scene, Screen * screen)
 	
 	timer = new ScreenLabel("Time: 00:00:00", 16);
 	timer->setPosition(320,0);
-	screen->addChild(timer);
+	//screen->addChild(timer);
 
 }
 
@@ -44,25 +41,14 @@ void Player::rotate(const Quaternion& q)
 void Player::Update(Number elapsed)
 {
 
-	milliseconds += elapsed * 1000;
-	if( milliseconds >= 1000)
-	{
-		seconds++;
-		milliseconds -=1000;
-		if(seconds >= 60)
-		{
-			minutes++;
-			seconds -= 60;
-		}
-	}
-	//std::cout<<"Timer:"<<minutes<<":"<<seconds<<":"<<milliseconds<<std::endl;
 	vel += accl*elapsed;
-	accl.z = (vel.z-maxSpeed)*elapsed;
-	if(vel.z < -maxSpeed)
+	accl.z = (vel.z-maxSpeed);
+	if(vel.length() > maxSpeed)
 	{
-		vel.z = -maxSpeed;
+	  vel.Normalize();
+		vel = vel * maxSpeed;
 	}
-	std::cout<<"speed: "<<vel.z<<std::endl;
+	//std::cout<<"speed: "<<vel.z<<std::endl;
 	obj->Translate(vel*elapsed);
 	obj->setYaw(obj->getYaw()+100*elapsed);
 	
