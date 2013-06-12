@@ -1,4 +1,6 @@
 #include <Polycode.h>
+#include "EnemyManager.cpp"
+#include "player.h"
 
 using namespace Polycode;
 
@@ -19,12 +21,16 @@ class Level
 		ScenePrimitive * ceil;
 		ScenePrimitive * lblind;
 		ScenePrimitive * rblind;
+		SceneLight * light;
+		bool inScene;
 		
 		Level(int size, int length, Vector3 pos, int pressure, CollisionScene * scene)
 			:pos(pos), Area(size*10),length(length), Pressure(pressure), scene(scene)
 		{			
 			Vector3 Color = Vector3( (rand() % 255 ) / 255.0, ( rand() % 255 ) / 255.0, ( rand() % 255 ) / 255.0 );
-				
+			
+			inScene = false;
+
 			floor = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1.1*size,0.1*10,1*length);
 			lwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*10,0.1*size,1*length);
 			rwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*10,0.1*size,1*length);
@@ -61,7 +67,7 @@ class Level
 			lwall->setMaterialByName("GroundMaterial");
 			
 			ceil->Roll(180);
-			ceil->setPosition(Vector3 ( 0,.5*10,0.5*length) );
+			ceil->setPosition(Vector3 ( 0,.5*10 + 0.01,0.5*length) );
 			ceil->setColor(1,1,1,.3);
 			//ceil->visible = false;
 			ceil->loadTexture("Resources/blue_texture.png");
@@ -75,6 +81,12 @@ class Level
 			lblind->Pitch(90);
 			lblind->setMaterialByName("GroundMaterial");
 			lblind->setPosition( Vector3( -(3+0.5*size), 0, length+0.01 ) );
+
+			ceil->alphaTest = true;
+			rblind->alphaTest = true;
+			lblind->alphaTest = true;
+
+
 			floor->Translate(pos);
 			lwall->Translate(pos);
 			rwall->Translate(pos);
@@ -82,16 +94,12 @@ class Level
 			rblind->Translate(pos);
 			lblind->Translate(pos);
 
-			scene->addCollisionChild(floor,CollisionSceneEntity::SHAPE_BOX);
-			scene->addCollisionChild(lwall,CollisionSceneEntity::SHAPE_BOX);
-			scene->addCollisionChild(rwall,CollisionSceneEntity::SHAPE_BOX);
-			scene->addCollisionChild(ceil,CollisionSceneEntity::SHAPE_BOX);
-			scene->addCollisionChild(rblind,CollisionSceneEntity::SHAPE_PLANE);
-			scene->addCollisionChild(lblind,CollisionSceneEntity::SHAPE_PLANE);
 
-			SceneLight * light = new SceneLight(SceneLight::AREA_LIGHT, scene,  33+ size);
+
+			light = new SceneLight(SceneLight::AREA_LIGHT, scene,  33+ size);
 			light->setPosition(0,0,pos.z + .5*length);
-			scene->addLight(light);
+
+			//addLevelScene();
 		}
 
 		double getspeed(  )
@@ -146,11 +154,13 @@ class Level
 				{
 					if(enemies[i]->getType() == SHARK || enemies[i]->getType() == COLUMN )
 					{
-						if(cr.colNormal.dot(player.vel) > 0)
+						if(cr.colNormal.dot(player.vel) < 0)
 							break;
-						Vector3 mv = cr.colNormal *cr.colDist * -1;
+						Vector3 mv = cr.colNormal *cr.colDist *- 1;
+						std::cout<<mv.x<<" "<<mv.y<<" "<<mv.z<<" "<<std::endl;
 						player.translate(mv.x,mv.y,mv.z);
-						player.vel = (cr.colNormal*player.vel.dot(cr.colNormal)*-2 + player.vel)* 0.5;
+						
+						player.vel = ((cr.colNormal*-1)*player.vel.dot(cr.colNormal*-1)*-2 + player.vel)* 0.5;
 						//std::cout<<player.vel.x<<" "<<player.vel.y<<" "<<std::endl;
 					}
 					else if(enemies[i]->getType() == SEAWEED)
@@ -168,7 +178,7 @@ class Level
 					}
 					else if(enemies[i]->getType() == COIN)
 					{
-						//std::cout<<"\nCollided: "<<enemies[i]->getVisible()<<std::endl;
+						scene->removeEntity(enemies[i]->getBox());
 						if(!(enemies[i]->getVisible()))
 							break;
 						player.incrCoins();//increase coin count
@@ -180,11 +190,46 @@ class Level
 			
 			
 		}
-		
-		
+		void addLevelScene()
+		  {
+			if ( inScene ) return;
+			inScene = true;
+			scene->addCollisionChild(floor,CollisionSceneEntity::SHAPE_BOX);
+			scene->addCollisionChild(lwall,CollisionSceneEntity::SHAPE_BOX);
+			scene->addCollisionChild(rwall,CollisionSceneEntity::SHAPE_BOX);
+			scene->addCollisionChild(ceil,CollisionSceneEntity::SHAPE_BOX);
+			scene->addCollisionChild(rblind,CollisionSceneEntity::SHAPE_PLANE);
+			scene->addCollisionChild(lblind,CollisionSceneEntity::SHAPE_PLANE);	
+			scene->addLight(light);
+		  }		
+
+
+		void removeLevelScene()
+		  {
+			if ( inScene)
+			  {
+				inScene = false;
+				scene->removeEntity(floor);
+				scene->removeEntity(lwall);
+				scene->removeEntity(rwall);
+				scene->removeEntity(ceil);
+				scene->removeEntity(rblind);
+				scene->removeEntity(lblind);
+				scene->removeLight(light);
+			  }
+		  }		
+
 
 		~Level()
-		{
-			
-		}
+		  {
+			std::cout<<"removing level"<<std::endl;
+			removeLevelScene();
+			delete floor;
+			delete lwall;
+			delete rwall;
+			delete ceil;
+			delete rblind;
+			delete lblind;
+			delete light;
+		  }
 };

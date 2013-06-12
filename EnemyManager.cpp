@@ -3,6 +3,10 @@
 #include "Enemy.cpp"
 #include "Polycode3DPhysics.h"
 #include <vector>
+
+#ifndef __ENEMYMANAGER_CPP__
+#define __ENEMYMANAGER_CPP__
+
 using namespace Polycode;
 
 class EnemyManager {
@@ -41,3 +45,4 @@ private:
 	
 	Scene * scene;
 };
+#endif // __ENEMYMANAGER_CPP__

@@ -13,9 +13,6 @@ class Player
 		
 		Camera * cam;
 		SceneLight * spotlight;
-		ScreenLabel * timer;
-		ScreenLabel * coinDisp;
-		Number minutes,seconds,milliseconds;
 		double maxSpeed;
 	public:
 		Number coins;
@@ -24,7 +21,7 @@ class Player
 		Vector3 accl;
 		Vector3 vel;
 		Player(ScenePrimitive * obj = NULL);
-		void Load(Scene * scene, Screen * screen);
+		void Load(Scene * scene);
 		void translate(const Number& x, const Number& y, const Number& z);
 		void rotate(const Quaternion & q);
 		const Vector3& getPosition();
