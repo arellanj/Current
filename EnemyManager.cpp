@@ -14,29 +14,29 @@ public:
 	EnemyManager(Scene * scene) : scene(scene){		
 	}
 	
-	void addEnemy(Enemy e){
+	void addEnemy(Enemy* e){
 		enemies.push_back(e);	
-		scene->addEntity(e.getBox());
+		scene->addEntity(e->getBox());
 	}
 	
-	void addEnemy(vector<Enemy> v){
+	void addEnemy(vector<Enemy*> v){
 		for(int i = 0;i<v.size();i++)
 		{
 			enemies.push_back(v[i]);	
-			scene->addEntity(v[i].getBox());
+			scene->addEntity(v[i]->getBox());
 		}
 	}
 	
 	Enemy getEnemy(int i){
-		return enemies[i];
+		return *enemies[i];
 	}
 	
 	void update(Number elapsed, Number dist){
 		for(int i = 0;i<enemies.size();i++)
-			enemies[i].update(elapsed, dist);
+			enemies[i]->update(elapsed, dist);
 	}
     
-    vector <Enemy> enemies;
+    vector <Enemy*> enemies;
 private:
 	
 	Scene * scene;

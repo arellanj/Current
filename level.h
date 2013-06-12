@@ -11,7 +11,7 @@ class Level
 		double length;
 				
 	public:
-		vector<Enemy> enemies;
+		vector<Enemy *> enemies;
 		CollisionScene * scene;
 		ScenePrimitive * floor;
 		ScenePrimitive * lwall;
@@ -42,10 +42,10 @@ class Level
 			
 			for(int i = 0;i<length/10;i++)
 			{
-				Enemy e(static_cast<EnemyType>(rand() % 4),Vector3(0,0,i*10 ),0,size);
-				e.getBox()->Translate(pos);
+				Enemy * e = new Enemy(static_cast<EnemyType>(rand() % 4),Vector3(0,0,i*10 ),0,size);
+				e->getBox()->Translate(pos);
 				enemies.push_back(e);
-				scene->addCollisionChild(e.getBox());	
+				scene->addCollisionChild(e->getBox());	
 			}
 			
 			floor->setPosition(Vector3( 0,-.5*10, 0.5*length) );
@@ -141,10 +141,10 @@ class Level
 			
 			for(int i = 0;i<enemies.size();i++)
 			{
-				CollisionResult cr = scene->testCollision(enemies[i].getBox(), player.obj);
+				CollisionResult cr = scene->testCollision(enemies[i]->getBox(), player.obj);
 				if(cr.collided)
 				{
-					if(enemies[i].getType() == SHARK || enemies[i].getType() == COLUMN )
+					if(enemies[i]->getType() == SHARK || enemies[i]->getType() == COLUMN )
 					{
 						if(cr.colNormal.dot(player.vel) > 0)
 							break;
@@ -153,16 +153,27 @@ class Level
 						player.vel = (cr.colNormal*player.vel.dot(cr.colNormal)*-2 + player.vel)* 0.5;
 						//std::cout<<player.vel.x<<" "<<player.vel.y<<" "<<std::endl;
 					}
-					else if(enemies[i].getType() == SEAWEED)
+					else if(enemies[i]->getType() == SEAWEED)
 					{
-						player.vel = player.vel * 0.9;
+						/*
+						if(!enemies[i]->inside){ //first time inside seaweed
+							enemies[i]->inside = true;
+							enemies[i]->tempSpeed = player.vel;
+							std::cout<<"\n1st time Inside Seaweed\n ";
+						}
+						player.vel = enemies[i]->tempSpeed * .5;						
+						std::cout<<"\nVelocity: "<<player.vel.x<<" "<<player.vel.y<<" "<<player.vel.z<<std::endl;
+						*/
+						player.vel = player.vel * .7;						
 					}
-					else if(enemies[i].getType() == COIN)
+					else if(enemies[i]->getType() == COIN)
 					{
-						if(!(enemies[i].getVisible()))
+						//std::cout<<"\nCollided: "<<enemies[i]->getVisible()<<std::endl;
+						if(!(enemies[i]->getVisible()))
 							break;
-						player.coins++;//increase coin count
-						enemies[i].setVisible(false);
+						player.incrCoins();//increase coin count
+						enemies[i]->setVisible(false);
+						enemies[i]->getBox()->visible = false;
 					} 
 				}
 			}

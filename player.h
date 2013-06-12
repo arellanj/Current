@@ -14,6 +14,7 @@ class Player
 		Camera * cam;
 		SceneLight * spotlight;
 		ScreenLabel * timer;
+		ScreenLabel * coinDisp;
 		Number minutes,seconds,milliseconds;
 		double maxSpeed;
 	public:
@@ -29,6 +30,7 @@ class Player
 		const Vector3& getPosition();
 		void Update(Number elapsed);
 		void setMaxSpeed(double speed);
+		void incrCoins();
 };
 
 

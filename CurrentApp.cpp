@@ -59,7 +59,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	for(int i = 0; i < 50 ; i++)
 	{
 		//int size = ( rand() % 10 ) +10;
-		size-= 9;
+		size-= 2;
 		if ( size < 6)
 		{
 			size = 20;
@@ -67,7 +67,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 		int length = ( rand() % 40) +15;
 		//std::cout<<"MADE: "<<size<<" , "<<length<<" at :" << next_pos + length<< std::endl;
 		next_pos += length;
-		Level * newlevel = new Level(size,length, Vector3(0,0,-next_pos), 8000, scene);
+		Level * newlevel = new Level(size,length, Vector3(0,0,-next_pos), 4000, scene);
 		path.push_back(newlevel);
 		enemies.addEnemy(newlevel->enemies);//add enemies to enemy manager		
 	}
@@ -86,6 +86,10 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	d_pressed->setPosition(0,40);
 	hud->addChild(a_pressed);
 	hud->addChild(d_pressed);
+	
+	ScreenLabel * coins = new ScreenLabel("Coins: ",16);
+	coins->setPosition(0,460);
+	hud->addChild(coins);
 
 	player = Player(obj);
 
@@ -110,7 +114,7 @@ void CurrentApp::handleEvent(Event *e)
 	if(e -> getDispatcher() == core->getInput())
 	{
 		InputEvent * inputEvent = (InputEvent*)e;
-		switch(e-> getEventCode())
+		switch(e->getEventCode())
 		{
 			case InputEvent::EVENT_KEYDOWN:
 				switch(inputEvent->keyCode())

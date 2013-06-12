@@ -25,6 +25,10 @@ void Player::Load(Scene* scene, Screen * screen)
 	timer = new ScreenLabel("Time: 00:00:00", 16);
 	timer->setPosition(320,0);
 	screen->addChild(timer);
+	
+	coinDisp = new ScreenLabel("0", 16);
+	coinDisp->setPosition(50,460);
+	screen->addChild(coinDisp);
 
 }
 
@@ -56,7 +60,7 @@ void Player::Update(Number elapsed)
 	}
 	//std::cout<<"Timer:"<<minutes<<":"<<seconds<<":"<<milliseconds<<std::endl;
 	vel += accl*elapsed;
-	accl.z = (vel.z-maxSpeed)*1.5*elapsed;
+	accl.z = (vel.z-maxSpeed)*1.5;
 	if(vel.z < -maxSpeed)
 	{
 		vel.z = -maxSpeed;
@@ -80,5 +84,11 @@ const Vector3& Player::getPosition()
 void Player::setMaxSpeed(double speed)
 {
 	maxSpeed = speed;
+}
+
+void Player::incrCoins()
+{
+	coins++;
+	coinDisp->setText(String::NumberToString(coins));
 }
 
