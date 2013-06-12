@@ -27,7 +27,6 @@ class Player
 		const Vector3& getPosition();
 		void Update(Number elapsed);
 		void setMaxSpeed(double speed);
-		void incrCoins();
 };
 
 

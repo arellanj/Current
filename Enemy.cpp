@@ -13,7 +13,7 @@ enum EnemyType { SHARK, SEAWEED, COLUMN, COIN };
 
 class Enemy {
 public:
-	Enemy(EnemyType type, Vector3 position, int height, int width) : type(type), swingValue(0), swingRange(width), visible(true), inside(false), tempSpeed(Vector3(0,0,0)){		
+	Enemy(EnemyType type, Vector3 position, int height, int width) : type(type), swingValue(0), swingRange(width), visible(true), inside(false){		
 		switch(type){
 			case SHARK :
 				box = new ScenePrimitive(ScenePrimitive::TYPE_BOX,1,1,1);
@@ -30,7 +30,7 @@ public:
 			
 			case COLUMN :
 				box = new ScenePrimitive(ScenePrimitive::TYPE_CYLINDER,10,1,10);
-				position.x = rand() % width  - width/2;
+				position.x = rand() % (width - 1)  - (width - 1)/2;
 				box->loadTexture("Resources/blue_texture.png");
 				break;
 			case COIN:
@@ -62,8 +62,10 @@ public:
 				box->setColor(1,1,1,box->color.a);
 			}
 		}
-		else
+		else{
 			box->setColor(1,1,1,0);
+			//box->setColor(1,1,1,.1);
+		}
 		 
 		
 		//This doens't work with coin yet, I think I need to use Enemy pointers now
@@ -109,11 +111,9 @@ public:
 	}
     
     bool inside;
-    Vector3 tempSpeed;
 private:
 	EnemyType type;
-	bool visible;
-	
+	bool visible;	
 	ScenePrimitive * box;
 	Number swingRange;
 	Number swingValue;

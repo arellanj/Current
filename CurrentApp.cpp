@@ -9,7 +9,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	CoreServices::getInstance()->getResourceManager()->addDirResource("Resources", false);
 
 	scene = new CollisionScene();
-	level = new LevelManager(50, scene);
+	level = new LevelManager(20, scene);
 
 	// Creating the Player object
 	ScenePrimitive * obj = new ScenePrimitive( ScenePrimitive::TYPE_SPHERE, 0.5, 10,10);
@@ -110,5 +110,6 @@ bool CurrentApp::Update() {
 	coins_hud->setText("Coins: "+ String::IntToString(player.coins));
 	time_hud->setText("Time: " + timer.getTime());
 	level->Update(elapsed, player);
+	if(player.levelPos == level->getLevelSize() - 1) timer.stop();
     return core->updateAndRender();
 }

@@ -4,6 +4,8 @@
 
 using namespace Polycode;
 
+enum RoomType { COINS, MIXED, EMPTY, RANDOM }; //needs to be in this order
+
 class Level
 {
 	private:
@@ -24,12 +26,14 @@ class Level
 		SceneLight * light;
 		bool inScene;
 		
-		Level(int size, int length, Vector3 pos, int pressure, CollisionScene * scene)
+		Level(int size, int length, Vector3 pos, int pressure, CollisionScene * scene, RoomType roomType = RANDOM)
 			:pos(pos), Area(size*10),length(length), Pressure(pressure), scene(scene)
 		{			
 			Vector3 Color = Vector3( (rand() % 255 ) / 255.0, ( rand() % 255 ) / 255.0, ( rand() % 255 ) / 255.0 );
 			
 			inScene = false;
+			
+			setupEnemies(roomType, size);
 
 			floor = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1.1*size,0.1*10,1*length);
 			lwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*10,0.1*size,1*length);
@@ -37,22 +41,6 @@ class Level
 			ceil = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1.1*size,0.1*10,1*length);
 			lblind = new ScenePrimitive(ScenePrimitive::TYPE_PLANE, 6,10);
 			rblind = new ScenePrimitive(ScenePrimitive::TYPE_PLANE, 6,10);
-
-			// one enemy
-			/*
-			Enemy e(COIN,Vector3(0,0,rand()%length),0,size);
-			e.getBox()->Translate(pos);
-			enemies.push_back(e);
-			scene->addCollisionChild(e.getBox());	
-			*/
-			
-			for(int i = 0;i<length/10;i++)
-			{
-				Enemy * e = new Enemy(static_cast<EnemyType>(rand() % 4),Vector3(0,0,i*10 ),0,size);
-				e->getBox()->Translate(pos);
-				enemies.push_back(e);
-				scene->addCollisionChild(e->getBox());	
-			}
 			
 			floor->setPosition(Vector3( 0,-.5*10, 0.5*length) );
 			floor->setMaterialByName("GroundMaterial");
@@ -112,6 +100,40 @@ class Level
 			return (  pos.z >= this->pos.z ) && ( pos.z <= this->pos.z + length ) ;
 		}
 		
+		void setupEnemies(RoomType roomType, int size)
+		{
+			int coin_x = (rand()%(size-1) - (size-1)/2);
+			int coin_y = (rand()%8 - 4);
+			if(roomType == RANDOM) roomType = static_cast<RoomType>(rand() % 2); //rand() % (total_room_types - 2)
+			for(int i = 0;i<length/10;i++)
+			{
+				Enemy * e;
+				
+				switch(roomType)
+				{
+					case COINS:
+						if(i < (length/10)/2)
+						{
+							e = new Enemy(COIN,Vector3(coin_x,0,i*10 ),0,size);
+							e->setPosition(Vector3(coin_x, coin_y,e->getPosition().z));
+						}
+						else
+							e = new Enemy(static_cast<EnemyType>(rand() % 4),Vector3(0,0,i*10 ),0,size);
+						break;
+					case MIXED:
+						if(rand() % 5 == 0) continue;
+						e = new Enemy(static_cast<EnemyType>(rand() % 4),Vector3(0,0,i*10 ),0,size);
+						break;
+					default:
+						break;
+				}
+				if(roomType == EMPTY)  break;
+				e->getBox()->Translate(pos);
+				enemies.push_back(e);
+				scene->addCollisionChild(e->getBox());	
+			}
+		}
+		
 		void collideUpdate(Player &  player)
 		{
 			// Test Walls
@@ -122,11 +144,6 @@ class Level
 			v.push_back(scene->testCollision(ceil, player.obj));
 			v.push_back(scene->testCollision(rblind, player.obj));
 			v.push_back(scene->testCollision(lblind, player.obj));
-
-	//		v.push_back(scene->testCollision(obj, player.obj));
-//			v.push_back(scene->testCollision(enemies[0].getBox(), player.obj));
-			
-			//for every enemy, push back collision result
 			
 			for(int i = 0;i<v.size();i++)
 			{
@@ -164,26 +181,22 @@ class Level
 						//std::cout<<player.vel.x<<" "<<player.vel.y<<" "<<std::endl;
 					}
 					else if(enemies[i]->getType() == SEAWEED)
-					{
-						/*
+					{						
 						if(!enemies[i]->inside){ //first time inside seaweed
 							enemies[i]->inside = true;
-							enemies[i]->tempSpeed = player.vel;
-							std::cout<<"\n1st time Inside Seaweed\n ";
-						}
-						player.vel = enemies[i]->tempSpeed * .5;						
-						std::cout<<"\nVelocity: "<<player.vel.x<<" "<<player.vel.y<<" "<<player.vel.z<<std::endl;
-						*/
-						player.vel = player.vel * .7;						
+							player.vel = Vector3(0,0,0);						
+							//std::cout<<"\n1st time Inside Seaweed\n ";
+						}						
+						//std::cout<<"\nVelocity: "<<player.vel.x<<" "<<player.vel.y<<" "<<player.vel.z<<std::endl;				
 					}
 					else if(enemies[i]->getType() == COIN)
 					{
 						scene->removeEntity(enemies[i]->getBox());
 						if(!(enemies[i]->getVisible()))
 							break;
-						player.incrCoins();//increase coin count
+						player.coins++;//increase coin count
 						enemies[i]->setVisible(false);
-						enemies[i]->getBox()->visible = false;
+						enemies[i]->getBox()->visible = false; 
 					} 
 				}
 			}
