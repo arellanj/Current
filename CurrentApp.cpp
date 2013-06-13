@@ -9,7 +9,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	CoreServices::getInstance()->getResourceManager()->addDirResource("Resources", false);
 
 	scene = new CollisionScene();
-	level = new LevelManager(20, scene);
+	level = new LevelManager(100, scene);
 
 	// Creating the Player object
 	ScenePrimitive * obj = new ScenePrimitive( ScenePrimitive::TYPE_SPHERE, 0.5, 10,10);

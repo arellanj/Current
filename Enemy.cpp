@@ -34,7 +34,8 @@ public:
 				box->loadTexture("Resources/blue_texture.png");
 				break;
 			case COIN:
-				box = new ScenePrimitive(ScenePrimitive::TYPE_SPHERE,1,5,5);
+				box = new ScenePrimitive(ScenePrimitive::TYPE_CYLINDER,.5,.5,10);
+				box->Pitch(90);
 				position.y = rand() % 8  - 4;
 				position.x = rand() % width  - width/2;
 				box->loadTexture("Resources/blue_texture.png");
@@ -68,14 +69,10 @@ public:
 		}
 		 
 		
-		//This doens't work with coin yet, I think I need to use Enemy pointers now
-		/*
-		std::cout<<visible<<" ";
-		if(!visible or (box->getPosition().z - 5) > dist)
-			box->visible = false;
-		else
-			box->visible = true;
-		*/
+		if(type== COIN){
+			box->Yaw(100*elapsed);
+			
+		}
 		if(type == SHARK){
 			swingValue += elapsed*(rand() % 6 + 1);
 			box->setPosition(sin(swingValue) * 4.5,box->getPosition().y,box->getPosition().z);	

@@ -63,11 +63,10 @@ void LevelManager::Update( Number elapsed, Player & player)
 
 void LevelManager::addLastRoom()
 {
-	pressure = 5;
 	double length = 100;
 	double size = 100;
 	next_pos += 100;
-	levels.push_back(new Level(size,length, Vector3(0,0,-next_pos), pressure, scene, EMPTY));
+	levels.push_back(new Level(size,length, Vector3(0,0,-next_pos), 100, scene, EMPTY));
 }
 
 int LevelManager::getLevelSize()
