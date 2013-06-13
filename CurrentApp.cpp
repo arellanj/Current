@@ -1,9 +1,11 @@
 #include "CurrentApp.h"
-
+#include <time.h>
+	
 CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 
 	core = new SDLCore(view, 640,480,false,false,0,0,120);	  
 
+	srand(time(NULL));
 	CoreServices::getInstance()->getResourceManager()->addArchive("default.pak");
 	CoreServices::getInstance()->getResourceManager()->addDirResource("default", false);
 	CoreServices::getInstance()->getResourceManager()->addDirResource("Resources", false);
@@ -48,7 +50,7 @@ CurrentApp::~CurrentApp() {
 
 void CurrentApp::handleEvent(Event *e)
 {
-
+ 	static int camnum = 2;
 	if(e -> getDispatcher() == core->getInput())
 	{
 		InputEvent * inputEvent = (InputEvent*)e;
@@ -77,6 +79,18 @@ void CurrentApp::handleEvent(Event *e)
 						break;
 					case 304: // Left Shift
 						keyboard.setKey(304, true);
+						break;
+					case 49: // 1 
+						if (camnum == 1 ) break;
+						camnum = 1;
+						scene->getDefaultCamera()->setPosition(Vector3(1,2,17));
+						scene->getDefaultCamera()->lookAt(Vector3( 0,0,player.homeSlice));
+						break;
+					case 50: // 2 
+						if (camnum == 2 ) break;
+						camnum = 2;
+						scene->getDefaultCamera()->setPosition(Vector3(15,15,17));
+						scene->getDefaultCamera()->lookAt(Vector3( 0,0,player.homeSlice));
 						break;
 					default:
 						std::cout<<"KEY "<<inputEvent->keyCode()<<std::endl;

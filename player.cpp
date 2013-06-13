@@ -14,8 +14,8 @@ Player::Player( ScenePrimitive * obj)
 void Player::Load(Scene* scene)
 {
 	cam = scene->getDefaultCamera();
-	cam -> setPosition(Vector3(1,2,17));
-	//cam -> setPosition(Vector3(15,15,15));
+	//cam -> setPosition(Vector3(1,2,17));
+	cam -> setPosition(Vector3(15,15,15));
 	//cam -> setPosition(Vector3(-70,0,0));
 	cam -> lookAt(obj->getPosition());
 	spotlight = new SceneLight(SceneLight::SPOT_LIGHT, scene, 33, .2, .5, .05);
@@ -72,6 +72,7 @@ void Player::Update(Number elapsed, const Keyboard & keyboard)
 		zoffset *= 0.7;
 	}
 
+
 	accl.z = (vel.z-maxSpeed);
 	if(vel.length() > maxSpeed)
 	{
@@ -87,7 +88,6 @@ void Player::Update(Number elapsed, const Keyboard & keyboard)
 
 	obj->setPositionZ(homeSlice + zoffset);
 	//cam-> Translate(0,0, vel.z*elapsed);
-	//cam->lookAt(obj->getPosition());
 	cam->setPositionZ(homeSlice + 15);
 	spotlight->setPosition( cam -> getPosition() );
 	spotlight->lookAt( obj->getPosition() );

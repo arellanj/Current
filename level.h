@@ -34,7 +34,6 @@ class Level
 			
 			inScene = false;
 			
-			setupEnemies(roomType, size);
 
 			floor = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*size,0.2,1*length);
 			lwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*10,0.2,1*length);
@@ -44,7 +43,8 @@ class Level
 			rblind = new ScenePrimitive(ScenePrimitive::TYPE_PLANE, 6,10);
 			
 			floor->setPosition(Vector3( 0,-.5*10, 0.5*length) );
-			floor->setMaterialByName("GroundMaterial");
+			floor->loadTexture("Resources/blue_texture.png");
+			//floor->setMaterialByName("GroundMaterial");
 
 			rwall->Roll(90);
 			rwall->setPosition(Vector3( 0.5*size,0,0.5*length ) );
@@ -53,7 +53,8 @@ class Level
 			//rwall->setColor(Color.x,Color.y,Color.z, 1);
 			lwall->Roll(-90);
 			lwall->setPosition(Vector3 ( -0.5*size,0,0.5*length ) );
-			lwall->setMaterialByName("GroundMaterial");
+			lwall->loadTexture("Resources/blue_texture.png");
+			//lwall->setMaterialByName("GroundMaterial");
 			
 			ceil->Roll(180);
 			ceil->setPosition(Vector3 ( 0,.5*10 + 0.01,0.5*length) );
@@ -68,7 +69,8 @@ class Level
 			rblind->setPosition( Vector3( 3+0.5*size, 0, length+0.01 ) );
 
 			lblind->Pitch(90);
-			lblind->setMaterialByName("GroundMaterial");
+			lblind->loadTexture("Resources/blue_texture.png");
+			//lblind->setMaterialByName("GroundMaterial");
 			lblind->setPosition( Vector3( -(3+0.5*size), 0, length+0.01 ) );
 
 			ceil->alphaTest = true;
@@ -88,6 +90,7 @@ class Level
 			light = new SceneLight(SceneLight::AREA_LIGHT, scene,  33+ size);
 			light->setPosition(0,0,pos.z + .5*length);
 
+			setupEnemies(roomType, size);
 			//addLevelScene();
 		}
 
