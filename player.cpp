@@ -45,10 +45,12 @@ void Player::Update(Number elapsed)
 	  vel.Normalize();
 		vel = vel * maxSpeed;
 	}
+
 	//std::cout<<"speed: "<<vel.z<<std::endl;
 	obj->Translate(vel*elapsed);
-	obj->setYaw(obj->getYaw()+100*elapsed);
+	obj->Yaw(100*elapsed);
 	
+
 	//cam-> Translate(0,0, vel.z*elapsed);
 	//cam->lookAt(obj->getPosition());
 	cam->setPositionZ(obj->getPosition().z + 15);
