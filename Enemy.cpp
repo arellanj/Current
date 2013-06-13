@@ -14,12 +14,18 @@ enum EnemyType { SHARK, SEAWEED, COLUMN, COIN };
 
 class Enemy {
 public:
-	Enemy(EnemyType type, Vector3 position, int height, int width) : type(type), swingValue(0), swingRange(width), visible(true), inside(false){		
+	Enemy(EnemyType type, Vector3 position, int height, int width) : type(type), swingValue(0), swingRange(width), visible(true), inside(false), prev(0){		
 		switch(type){
 			case SHARK :
 				box = new ScenePrimitive(ScenePrimitive::TYPE_BOX,1,1,1);
+				tail= new ScenePrimitive(ScenePrimitive::TYPE_CONE,.5,.5,10);
+				box->addChild(tail);
 				position.y = rand() % 8  - 4;
 				box->loadTexture("Resources/pink_texture.png");					
+				tail->loadTexture("Resources/pink_texture.png");		
+				tail->Roll(-90);
+				tail->setPosition(Vector3(-.75,0,0));
+				tail->alphaTest = true;			
 				break;		
 				
 			case SEAWEED : 
@@ -80,8 +86,20 @@ public:
 			}
 		}
 		if(type == SHARK){
+			if(prev - sin(swingValue) < 0)
+			{
+				tail->setPosition(Vector3(-.75,0,0));
+				tail->setYaw(0);
+			}
+			else
+			{
+				tail->setPosition(Vector3(.75,0,0));
+				tail->setYaw(180);
+			}
+			prev = sin(swingValue);
 			swingValue += elapsed*(rand() % 6 + 1);
-			box->setPosition(sin(swingValue) * 4.5,box->getPosition().y,box->getPosition().z);	
+			//std::cout<<"SWING: "<<sin(swingValue) * swingRange * .5<<std::endl;
+			box->setPosition(sin(swingValue) * swingRange * .5,box->getPosition().y,box->getPosition().z);	
 		}	
 	}
 	
@@ -118,9 +136,10 @@ private:
 	EnemyType type;
 	bool visible;	
 	ScenePrimitive * box;
+	ScenePrimitive * tail;
 	Number swingRange;
 	Number swingValue;
-	
+	Number prev;
 	
 };
 #endif // __ENEMY_CPP__

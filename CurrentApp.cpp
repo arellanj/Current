@@ -9,7 +9,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	CoreServices::getInstance()->getResourceManager()->addDirResource("Resources", false);
 
 	scene = new CollisionScene();
-	level = new LevelManager(50, scene);
+	level = new LevelManager(10, scene);
 
 	// Creating the Player object
 	ScenePrimitive * obj = new ScenePrimitive( ScenePrimitive::TYPE_SPHERE, 0.5, 10,10);
@@ -17,7 +17,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	obj->setMaterialByName("CubeMaterial");
 	scene->addCollisionChild(obj);
 
-	Screen *hud = new Screen();
+	hud = new Screen();
 	keys_pressed = new ScreenLabel("Stats: ",16);
 	hud->addChild(keys_pressed);
 	coins_hud = new ScreenLabel("Coins: 0", 16);
@@ -26,14 +26,13 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	time_hud->setPosition(0,40);
 	hud->addChild(coins_hud);
 	hud->addChild(time_hud);
+	
 
 	player = Player(obj);
 
 	core->getInput()->addEventListener(this, InputEvent::EVENT_KEYDOWN);
 	core->getInput()->addEventListener(this, InputEvent::EVENT_KEYUP);
 	
-
-
 	//player.Load(scene, hud);
 	//physScene->addPhysicsChild(obj, PhysicsSceneEntity::SHAPE_SPHERE, 1.0);
 	player.Load(scene);
@@ -108,11 +107,24 @@ void CurrentApp::handleEvent(Event *e)
 bool CurrentApp::Update() {
 	double elapsed = core->getElapsed();
 	
-	timer.Update(elapsed);
-	player.Update(elapsed);
-	coins_hud->setText("Coins: "+ String::IntToString(player.coins));
-	time_hud->setText("Time: " + timer.getTime());
-	level->Update(elapsed, player);
-	if(player.levelPos == level->getLevelSize() - 1) timer.stop();
+	if(player.levelPos == level->getLevelSize() - 1)
+	{
+		timer.stop();
+		ScreenLabel * winner = new ScreenLabel("YOU'RE WINRAR", 50);
+		winner->setPosition(120,140);
+		hud->addChild(winner);
+		Vector3 winPos = level->getLevel(level->getLevelSize() - 1)->light->getPosition();
+		Vector3 winDir = winPos - player.getPosition();
+		winDir.Normalize();
+		player.obj->Translate(winDir);
+	}
+	else
+	{
+		level->Update(elapsed, player);
+		timer.Update(elapsed);
+		player.Update(elapsed);
+		coins_hud->setText("Coins: "+ String::IntToString(player.coins));
+		time_hud->setText("Time: " + timer.getTime());
+	}
     return core->updateAndRender();
 }
