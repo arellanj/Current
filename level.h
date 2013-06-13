@@ -200,7 +200,7 @@ class Level
 					player.translate(mv.x,mv.y,mv.z);
 					//player.vel = (cr.colNormal*player.vel.dot(cr.colNormal)*-2 + player.vel)* 0.5;
 					Vector3 negZ = Vector3(0,0,-1);
-					Vector3 perpen = mv.crossProduct(negZ);
+					Vector3 perpen = (cr.colNormal*-1).crossProduct(negZ);
 					player.vel = negZ * player.vel.dot(negZ) + perpen * player.vel.dot(perpen);
 					//std::cout<<player.vel.x<<" "<<player.vel.y<<" "<<std::endl;				
 				}
