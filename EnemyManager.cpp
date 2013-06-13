@@ -35,9 +35,9 @@ public:
 		return *enemies[i];
 	}
 	
-	void update(Number elapsed, Number dist){
+	void update(Number elapsed, Player player){
 		for(int i = 0;i<enemies.size();i++)
-			enemies[i]->update(elapsed, dist);
+			enemies[i]->update(elapsed, player);
 	}
     
     vector <Enemy*> enemies;
