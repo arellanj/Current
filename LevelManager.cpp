@@ -57,9 +57,8 @@ void LevelManager::Update( Number elapsed, Player & player)
 
   	levels[player.levelPos]->collideUpdate(player);
 
-	Number r = 0.51;
+	Number r = 0.52;
 
-	std::cout<<"ball rad = "<<r<<std::endl;
 	Vector3 pos = player.getPosition();
 	double size = 0.5*levels[player.levelPos]->size;
 	if( ( pos.x - r ) < -size + .1)

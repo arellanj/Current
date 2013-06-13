@@ -46,7 +46,6 @@ void Player::Update(Number elapsed)
 		vel = vel * maxSpeed;
 	}
 
-	std::cout<<"YPOS "<<obj->getPosition().y<<std::endl;
 	obj->Translate(vel*elapsed);
 	obj->Yaw(100*elapsed);
 	
