@@ -68,8 +68,3 @@ void Player::setMaxSpeed(double speed)
 	maxSpeed = speed;
 }
 
-void Player::incrCoins()
-{
-	coins++;
-}
-
