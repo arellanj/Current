@@ -3,6 +3,7 @@
 #include "Polycode3DPhysics.h"
 #include "player.h"
 #include "LevelManager.h"
+#include "keyboard.H"
 #include <vector>
 #include <iostream>
 
@@ -69,6 +70,7 @@ private:
 	myTimer timer;
 	Core *core;
 	Player player;
+	Keyboard keyboard;
 	CollisionScene *scene;
 	LevelManager *level;
 	ScreenLabel *keys_pressed, *coins_hud, *time_hud;

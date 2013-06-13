@@ -58,19 +58,29 @@ void CurrentApp::handleEvent(Event *e)
 			case InputEvent::EVENT_KEYDOWN:
 				switch(inputEvent->keyCode())
 				{
+					case 27: // ESCAPE
+						exit(0);
+						break;
 					case KEY_UP:
-						player.vel.y = 4;
+						keyboard.setKey(KEY_UP, true);
 						break;
 					case KEY_DOWN:
-						player.vel.y = -4;
+						keyboard.setKey(KEY_DOWN, true);
 						break;
 					case KEY_LEFT:
-						player.vel.x = -4;
+						keyboard.setKey(KEY_LEFT, true);
 						break;
 					case KEY_RIGHT:
-						player.vel.x = 4;
+						keyboard.setKey(KEY_RIGHT, true);
+						break;
+					case 306: // Left Control 
+						keyboard.setKey(306, true);
+						break;
+					case 304: // Left Shift
+						keyboard.setKey(304, true);
 						break;
 					default:
+						std::cout<<"KEY "<<inputEvent->keyCode()<<std::endl;
 						break;
 								
 				}
@@ -79,19 +89,22 @@ void CurrentApp::handleEvent(Event *e)
 				switch(inputEvent->keyCode())
 				{
 					case KEY_UP:
-						player.accl.y = 0;
+						keyboard.setKey(KEY_UP, false);
 						break;
 					case KEY_DOWN:
-						player.accl.y = 0;
+						keyboard.setKey(KEY_DOWN, false);
 						break;
 					case KEY_LEFT:
-						player.accl.x = 0;
+						keyboard.setKey(KEY_LEFT, false);
 						break;
 					case KEY_RIGHT:
-						player.accl.x =0;
+						keyboard.setKey(KEY_RIGHT, false);
 						break;
-					case 27:
-						exit(0);
+					case 306: // Left Control 
+						keyboard.setKey(306, false);
+						break;
+					case 304: // Left Shift
+						keyboard.setKey(304, false);
 						break;
 					default:
 						break;
@@ -109,7 +122,7 @@ bool CurrentApp::Update() {
 	double elapsed = core->getElapsed();
 	
 	timer.Update(elapsed);
-	player.Update(elapsed);
+	player.Update(elapsed, keyboard);
 	coins_hud->setText("Coins: "+ String::IntToString(player.coins));
 	time_hud->setText("Time: " + timer.getTime());
 	level->Update(elapsed, player);

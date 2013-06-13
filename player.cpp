@@ -3,6 +3,8 @@
 Player::Player( ScenePrimitive * obj)
 	:obj(obj), cam(NULL), spotlight(NULL), coins(0)
 {
+	zoffset = 0;
+	homeSlice = 0;
 	vel = Vector3(0,0,0);
 	accl = Vector3(0,0,-1);
 	levelPos = -1;
@@ -34,10 +36,41 @@ void Player::rotate(const Quaternion& q)
 	obj->setRotationQuat(rotated.w, rotated.x, rotated.y, rotated.z);
 }
 
-void Player::Update(Number elapsed)
+void Player::Update(Number elapsed, const Keyboard & keyboard)
 {
 
+	if(keyboard.isKeyDown(KEY_UP))
+	{
+		vel.y = 4;
+	}
+	if(keyboard.isKeyDown(KEY_DOWN))
+	{
+		vel.y = -4;
+	}
+	if(keyboard.isKeyDown(KEY_LEFT))
+	{
+		vel.x = -4;
+	}
+	if(keyboard.isKeyDown(KEY_RIGHT))
+	{
+		vel.x = 4;
+	}
+	if(keyboard.isKeyDown(304))
+	{
+		zoffset -= 0.5;
+		if (zoffset < -4) zoffset = -4;
+	}
+	if(keyboard.isKeyDown(306))
+	{
+		zoffset += 0.5;
+		if (zoffset > 4) zoffset = 4;
+	}
+
 	vel += accl*elapsed;
+	if( !keyboard.isKeyDown(304) && !keyboard.isKeyDown(306) )
+	{
+		zoffset *= 0.7;
+	}
 
 	accl.z = (vel.z-maxSpeed);
 	if(vel.length() > maxSpeed)
@@ -47,12 +80,15 @@ void Player::Update(Number elapsed)
 	}
 
 	obj->Translate(vel*elapsed);
-	obj->Yaw(100*elapsed);
+	obj->Yaw(vel.x*200*elapsed);
+	obj->Pitch(vel.y*-200*elapsed);
+	homeSlice += vel.z*elapsed;
 	
 
+	obj->setPositionZ(homeSlice + zoffset);
 	//cam-> Translate(0,0, vel.z*elapsed);
 	//cam->lookAt(obj->getPosition());
-	cam->setPositionZ(obj->getPosition().z + 15);
+	cam->setPositionZ(homeSlice + 15);
 	spotlight->setPosition( cam -> getPosition() );
 	spotlight->lookAt( obj->getPosition() );
 }
