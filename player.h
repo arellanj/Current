@@ -19,7 +19,7 @@ class Player
 		Number coins;
 		Number zoffset;
 		Number homeSlice;
-		bool buttonPressed[6];
+		bool dirtyCam;
 		ScenePrimitive * obj;
 		int levelPos;
 		Vector3 accl;

@@ -198,7 +198,7 @@ class Level
 				{
 					if(cr.colNormal.dot(player.vel) > 0)
 						break;
-					std::cout<<player.vel.x<<" "<<player.vel.y<<" "<<std::endl;
+					//std::cout<<player.vel.x<<" "<<player.vel.y<<" "<<std::endl;
 					Vector3 mv = cr.colNormal *cr.colDist * -1;
 					player.translate(mv.x,mv.y,mv.z);
 					//player.vel = (cr.colNormal*player.vel.dot(cr.colNormal)*-2 + player.vel)* 0.5;
@@ -280,7 +280,6 @@ class Level
 
 		~Level()
 		  {
-			std::cout<<"removing level"<<std::endl;
 			removeLevelScene();
 			delete floor;
 			delete lwall;
