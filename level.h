@@ -34,7 +34,7 @@ class Level
 			
 			inScene = false;
 			
-			setupEnemies(roomType, size);
+			//setupEnemies(roomType, size);
 
 			floor = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*size,0.2,1*length);
 			lwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*10,0.2,1*length);
@@ -112,32 +112,32 @@ class Level
 
 				emitter->setPosition(Vector3(0,0,length));
 				emitter->Translate(pos);
-	emitter->useScaleCurves = true;
-	emitter->scaleCurve.addControlPoint2d(0, 0.3);
-	emitter->scaleCurve.addControlPoint2d(0.5, 1);
-	emitter->scaleCurve.addControlPoint2d(1, 0);
-	
-	emitter->useColorCurves = true;
-	emitter->colorCurveR.addControlPoint2d(0, 0.3);
-	emitter->colorCurveR.addControlPoint2d(0.1, 1);	
-	emitter->colorCurveR.addControlPoint2d(0.4, 1);		
-	emitter->colorCurveR.addControlPoint2d(0.5, 0);	
-	emitter->colorCurveR.addControlPoint2d(1, 0);
-	
-	emitter->colorCurveG.addControlPoint2d(0, 0.3);
-	emitter->colorCurveG.addControlPoint2d(0.1, 0.6);	
-	emitter->colorCurveG.addControlPoint2d(0.4, 0.6);		
-	emitter->colorCurveG.addControlPoint2d(0.5, 0);		
-	emitter->colorCurveG.addControlPoint2d(1, 0.0);
-	
-	emitter->colorCurveB.addControlPoint2d(0, 1);
-	emitter->colorCurveB.addControlPoint2d(0.1, 0);	
-	emitter->colorCurveB.addControlPoint2d(1, 0);
-	
-	emitter->colorCurveA.addControlPoint2d(0, 0);
-	emitter->colorCurveA.addControlPoint2d(0.05, 1);
-	emitter->colorCurveA.addControlPoint2d(0.6, 1);
-	emitter->colorCurveA.addControlPoint2d(1, 0);
+				emitter->useScaleCurves = true;
+				emitter->scaleCurve.addControlPoint2d(0, 0.3);
+				emitter->scaleCurve.addControlPoint2d(0.5, 1);
+				emitter->scaleCurve.addControlPoint2d(1, 0);
+				
+				emitter->useColorCurves = true;
+				emitter->colorCurveR.addControlPoint2d(0, 0.3);
+				emitter->colorCurveR.addControlPoint2d(0.1, 1);	
+				emitter->colorCurveR.addControlPoint2d(0.4, 1);		
+				emitter->colorCurveR.addControlPoint2d(0.5, 0);	
+				emitter->colorCurveR.addControlPoint2d(1, 0);
+				
+				emitter->colorCurveG.addControlPoint2d(0, 0.3);
+				emitter->colorCurveG.addControlPoint2d(0.1, 0.6);	
+				emitter->colorCurveG.addControlPoint2d(0.4, 0.6);		
+				emitter->colorCurveG.addControlPoint2d(0.5, 0);		
+				emitter->colorCurveG.addControlPoint2d(1, 0.0);
+				
+				emitter->colorCurveB.addControlPoint2d(0, 1);
+				emitter->colorCurveB.addControlPoint2d(0.1, 0);	
+				emitter->colorCurveB.addControlPoint2d(1, 0);
+				
+				emitter->colorCurveA.addControlPoint2d(0, 0);
+				emitter->colorCurveA.addControlPoint2d(0.05, 1);
+				emitter->colorCurveA.addControlPoint2d(0.6, 1);
+				emitter->colorCurveA.addControlPoint2d(1, 0);
 
 				
 				scene->addEntity(emitter);

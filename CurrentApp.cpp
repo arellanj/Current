@@ -9,7 +9,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	CoreServices::getInstance()->getResourceManager()->addDirResource("Resources", false);
 
 	scene = new CollisionScene();
-	level = new LevelManager(10, scene);
+	level = new LevelManager(30, scene);
 
 	// Creating the Player object
 	ScenePrimitive * obj = new ScenePrimitive( ScenePrimitive::TYPE_SPHERE, 0.5, 10,10);
@@ -110,9 +110,13 @@ bool CurrentApp::Update() {
 	if(player.levelPos == level->getLevelSize() - 1)
 	{
 		timer.stop();
+		//winner label
 		ScreenLabel * winner = new ScreenLabel("YOU'RE WINRAR", 50);
 		winner->setPosition(120,140);
 		hud->addChild(winner);
+		
+		//
+		
 		Vector3 winPos = level->getLevel(level->getLevelSize() - 1)->light->getPosition();
 		Vector3 winDir = winPos - player.getPosition();
 		winDir.Normalize();
