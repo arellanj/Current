@@ -11,7 +11,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	CoreServices::getInstance()->getResourceManager()->addDirResource("Resources", false);
 
 	scene = new CollisionScene();
-	level = new LevelManager(1, scene);
+	level = new LevelManager(30, scene);
 
 	// Creating the Player object
 	ScenePrimitive * obj = new ScenePrimitive( ScenePrimitive::TYPE_SPHERE, 0.5, 10,10);
@@ -139,7 +139,7 @@ bool CurrentApp::Update() {
 		timer.stop();
 		
 		int timeBonusPoints = 0;
-		if(timer.getTimeInSeconds() <= 107.0) timeBonusPoints += 1000;
+		if(timer.getTimeInSeconds() <= 106.0) timeBonusPoints += 1000;
 		else if(timer.getTimeInSeconds() <= 111.0) timeBonusPoints += 500;
 		else if(timer.getTimeInSeconds() <= 116.0) timeBonusPoints += 250;
 		
