@@ -90,12 +90,17 @@ void LevelManager::addLastRoom()
 	double length = 100;
 	double size = 100;
 	next_pos += 100;
-	levels.push_back(new Level(size,length, Vector3(0,0,-next_pos), 100, scene, EMPTY));
+	levels.push_back(new Level(size,length, Vector3(0,0,-next_pos), 4000, scene, EMPTY));
 }
 
 int LevelManager::getLevelSize()
 {
 	return levels.size();
+}
+
+Level* LevelManager::getLevel(int index)
+{
+	return levels[index];
 }
 
 LevelManager::~LevelManager()

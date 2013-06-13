@@ -74,5 +74,6 @@ private:
 	CollisionScene *scene;
 	LevelManager *level;
 	ScreenLabel *keys_pressed, *coins_hud, *time_hud;
+	Screen *hud;
 	void handleEvent(Event *e);
 };

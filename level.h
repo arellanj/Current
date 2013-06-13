@@ -34,7 +34,7 @@ class Level
 			
 			inScene = false;
 			
-			setupEnemies(roomType, size);
+			//setupEnemies(roomType, size);
 
 			floor = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*size,0.2,1*length);
 			lwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*10,0.2,1*length);
@@ -103,6 +103,47 @@ class Level
 		
 		void setupEnemies(RoomType roomType, int size)
 		{
+			if(roomType == EMPTY)
+			{
+				SceneParticleEmitter * emitter = new SceneParticleEmitter("TestParticle", 
+					Particle::BILLBOARD_PARTICLE, ParticleEmitter::CONTINUOUS_EMITTER, 4, 1000,
+					Vector3(0.0,1.0,0.0), Vector3(0.0,0.0,0.0), Vector3(0.3, 0.0, 0.3),
+					Vector3(30,10,100));		
+
+				emitter->setPosition(Vector3(0,0,length));
+				emitter->Translate(pos);
+				emitter->useScaleCurves = true;
+				emitter->scaleCurve.addControlPoint2d(0, 0.3);
+				emitter->scaleCurve.addControlPoint2d(0.5, 1);
+				emitter->scaleCurve.addControlPoint2d(1, 0);
+				
+				emitter->useColorCurves = true;
+				emitter->colorCurveR.addControlPoint2d(0, 0.3);
+				emitter->colorCurveR.addControlPoint2d(0.1, 1);	
+				emitter->colorCurveR.addControlPoint2d(0.4, 1);		
+				emitter->colorCurveR.addControlPoint2d(0.5, 0);	
+				emitter->colorCurveR.addControlPoint2d(1, 0);
+				
+				emitter->colorCurveG.addControlPoint2d(0, 0.3);
+				emitter->colorCurveG.addControlPoint2d(0.1, 0.6);	
+				emitter->colorCurveG.addControlPoint2d(0.4, 0.6);		
+				emitter->colorCurveG.addControlPoint2d(0.5, 0);		
+				emitter->colorCurveG.addControlPoint2d(1, 0.0);
+				
+				emitter->colorCurveB.addControlPoint2d(0, 1);
+				emitter->colorCurveB.addControlPoint2d(0.1, 0);	
+				emitter->colorCurveB.addControlPoint2d(1, 0);
+				
+				emitter->colorCurveA.addControlPoint2d(0, 0);
+				emitter->colorCurveA.addControlPoint2d(0.05, 1);
+				emitter->colorCurveA.addControlPoint2d(0.6, 1);
+				emitter->colorCurveA.addControlPoint2d(1, 0);
+
+				
+				scene->addEntity(emitter);
+				
+				return;
+			}
 			int coin_x = (rand()%(size-1) - (size-1)/2);
 			int coin_y = (rand()%8 - 4);
 			if(roomType == RANDOM) roomType = static_cast<RoomType>(rand() % 2); //rand() % (total_room_types - 2)
@@ -175,7 +216,7 @@ class Level
 						if(cr.colNormal.dot(player.vel) < 0)
 							break;
 						Vector3 mv = cr.colNormal *cr.colDist *- 1;
-						std::cout<<mv.x<<" "<<mv.y<<" "<<mv.z<<" "<<std::endl;
+						//std::cout<<mv.x<<" "<<mv.y<<" "<<mv.z<<" "<<std::endl;
 						player.translate(mv.x,mv.y,mv.z);
 						
 						player.vel = ((cr.colNormal*-1)*player.vel.dot(cr.colNormal*-1)*-2 + player.vel)* 0.5;

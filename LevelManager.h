@@ -22,6 +22,7 @@ public:
 	void Update( Number elapsed , Player & player);
 	void addLastRoom();
 	int getLevelSize();
+	Level* getLevel(int index);
 };
 
 
