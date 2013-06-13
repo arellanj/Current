@@ -90,6 +90,9 @@ void CurrentApp::handleEvent(Event *e)
 					case KEY_RIGHT:
 						player.accl.x =0;
 						break;
+					case 27:
+						exit(0);
+						break;
 					default:
 						break;
 				}

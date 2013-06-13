@@ -30,7 +30,7 @@ LevelManager::LevelManager(Number levelNum, CollisionScene * scene)
 
 void LevelManager::Update( Number elapsed, Player & player)
 {
-  for ( int i  = 0 ; i < levels.size() ; i++ )
+	for ( int i  = 0 ; i < levels.size() ; i++ )
 	{
   	  //std::cout<< player.getPosition().z <<std:: endl;
   	  Vector3 position = player.getPosition();
@@ -54,9 +54,32 @@ void LevelManager::Update( Number elapsed, Player & player)
 
 	}
 
-  levels[player.levelPos]->collideUpdate(player);
+  	levels[player.levelPos]->collideUpdate(player);
 
-  enemies.update(elapsed, player.getPosition().z);
+	Number r = player.obj->getBBoxRadius();
+	Vector3 pos = player.getPosition();
+	double size = 0.5*levels[player.levelPos]->size;
+	if( ( pos.x - r ) < -size )
+	{
+		pos.x = -size + r;
+	}
+	else if( ( pos.x + r ) > size)
+	{
+		pos.x = (size - r);
+	}
+
+	if( ( pos.y - r ) < -5)
+	{
+		pos.y = -5 + r;
+	}
+	else if( ( pos.y + r ) > 5)
+	{
+		pos.y = (5 - r);
+	}
+	player.obj->setPositionX(pos.x);
+	player.obj->setPositionY(pos.y);
+
+  	enemies.update(elapsed, player.getPosition().z);
  
 }
 

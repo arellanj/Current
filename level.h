@@ -22,10 +22,11 @@ class Level
 		ScenePrimitive * lblind;
 		ScenePrimitive * rblind;
 		SceneLight * light;
+		double size;
 		bool inScene;
 		
 		Level(int size, int length, Vector3 pos, int pressure, CollisionScene * scene)
-			:pos(pos), Area(size*10),length(length), Pressure(pressure), scene(scene)
+			:pos(pos), Area(size*10),length(length), Pressure(pressure), scene(scene), size(size)
 		{			
 			Vector3 Color = Vector3( (rand() % 255 ) / 255.0, ( rand() % 255 ) / 255.0, ( rand() % 255 ) / 255.0 );
 			
