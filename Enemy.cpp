@@ -38,7 +38,7 @@ public:
 				box->Pitch(90);
 				position.y = rand() % 8  - 4;
 				position.x = rand() % width  - width/2;
-				box->loadTexture("Resources/blue_texture.png");
+				box->loadTexture("Resources/yellow_texture.png");
 				
 			default : 
 				break;
