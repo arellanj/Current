@@ -11,7 +11,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	CoreServices::getInstance()->getResourceManager()->addDirResource("Resources", false);
 
 	scene = new CollisionScene();
-	level = new LevelManager(1, scene);
+	level = new LevelManager(30, scene);
 
 	// Creating the Player object
 	ScenePrimitive * obj = new ScenePrimitive( ScenePrimitive::TYPE_SPHERE, 0.5, 10,10);
@@ -46,11 +46,15 @@ CurrentApp::~CurrentApp() {
 	delete level;
 	delete scene;
 	delete core;
+	delete coins_hud;
+	delete time_hud;
+	delete keys_pressed;
+	delete hud;
 }
 
 void CurrentApp::handleEvent(Event *e)
 {
- 	static int camnum = 2;
+ 	static int camnum = 1;
 	if(e -> getDispatcher() == core->getInput())
 	{
 		InputEvent * inputEvent = (InputEvent*)e;
@@ -84,16 +88,16 @@ void CurrentApp::handleEvent(Event *e)
 						if (camnum == 1 ) break;
 						camnum = 1;
 						scene->getDefaultCamera()->setPosition(Vector3(1,2,17));
-						scene->getDefaultCamera()->lookAt(Vector3( 0,0,player.homeSlice));
+						player.dirtyCam = true;
 						break;
 					case 50: // 2 
 						if (camnum == 2 ) break;
 						camnum = 2;
 						scene->getDefaultCamera()->setPosition(Vector3(15,15,17));
-						scene->getDefaultCamera()->lookAt(Vector3( 0,0,player.homeSlice));
+						player.dirtyCam = true;
 						break;
 					default:
-						std::cout<<"KEY "<<inputEvent->keyCode()<<std::endl;
+						//std::cout<<"KEY "<<inputEvent->keyCode()<<std::endl;
 						break;
 								
 				}
