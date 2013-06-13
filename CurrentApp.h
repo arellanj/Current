@@ -58,6 +58,11 @@ class myTimer
 					String::IntToString(seconds)+":"+
 					String::IntToString(milliseconds);
 		}
+		
+		double getTimeInSeconds()
+		{
+			return minutes*60 + seconds + milliseconds/1000.0;
+		}
 };
 
 class CurrentApp : public EventHandler {

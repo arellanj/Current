@@ -34,7 +34,7 @@ class Level
 			
 			inScene = false;
 			
-			//setupEnemies(roomType, size);
+			setupEnemies(roomType, size);
 
 			floor = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*size,0.2,1*length);
 			lwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*10,0.2,1*length);
@@ -211,7 +211,7 @@ class Level
 				CollisionResult cr = scene->testCollision(enemies[i]->getBox(), player.obj);
 				if(cr.collided)
 				{
-					if(enemies[i]->getType() == SHARK)
+					if(enemies[i]->getType() == SHARK || enemies[i]->getType() == COLUMN )
 					{
 						if(cr.colNormal.dot(player.vel) < 0)
 							break;
@@ -221,24 +221,6 @@ class Level
 						
 						player.vel = ((cr.colNormal*-1)*player.vel.dot(cr.colNormal*-1)*-2 + player.vel)* 0.5;
 						//std::cout<<player.vel.x<<" "<<player.vel.y<<" "<<std::endl;
-					}
-					else if(enemies[i]->getType() == COLUMN)
-					{
-						Vector3 dist = player.obj->getPosition() - enemies[i]->getBox()->getPosition();
-						dist.y = 0;
-						if(dist.length() < .5 + 1)
-						{
-
-							dist.Normalize();
-							if(dist*-1 != cr.colNormal)
-							{
-								std::cout<<"I FUCKING KNEW IT "<<std::endl;
-							}
-							if(dist.dot(player.vel) > 0)
-								break;
-							player.vel = ((dist)*player.vel.dot(dist)*-2 + player.vel)*0.5;
-							
-						}
 					}
 					else if(enemies[i]->getType() == SEAWEED)
 					{						

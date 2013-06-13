@@ -9,7 +9,7 @@ CurrentApp::CurrentApp(PolycodeView *view) : EventHandler() {
 	CoreServices::getInstance()->getResourceManager()->addDirResource("Resources", false);
 
 	scene = new CollisionScene();
-	level = new LevelManager(30, scene);
+	level = new LevelManager(1, scene);
 
 	// Creating the Player object
 	ScenePrimitive * obj = new ScenePrimitive( ScenePrimitive::TYPE_SPHERE, 0.5, 10,10);
@@ -123,13 +123,38 @@ bool CurrentApp::Update() {
 	if(player.levelPos == level->getLevelSize() - 1)
 	{
 		timer.stop();
+		
+		int timeBonusPoints = 0;
+		if(timer.getTimeInSeconds() <= 107.0) timeBonusPoints += 1000;
+		else if(timer.getTimeInSeconds() <= 111.0) timeBonusPoints += 500;
+		else if(timer.getTimeInSeconds() <= 116.0) timeBonusPoints += 250;
+		
 		//winner label
-		ScreenLabel * winner = new ScreenLabel("YOU'RE WINRAR", 50);
+		ScreenLabel * winner = new ScreenLabel("Congratulations!", 50);
 		winner->setPosition(120,140);
 		hud->addChild(winner);
-		
-		//
-		
+		//time bonus
+		ScreenLabel * timebonus = new ScreenLabel("Time Bonus: ", 16);
+		timebonus->setPosition(220,200);
+		hud->addChild(timebonus);
+		ScreenLabel * timebonusDisp = new ScreenLabel(String::IntToString(timeBonusPoints), 16);
+		timebonusDisp->setPosition(330,200);
+		hud->addChild(timebonusDisp);		
+		//coin bonus
+		ScreenLabel * coinbonus = new ScreenLabel("Coin Bonus: ", 16);
+		coinbonus->setPosition(220,220);
+		hud->addChild(coinbonus);
+		ScreenLabel * coinbonusDisp = new ScreenLabel(String::IntToString(player.coins * 100), 16);
+		coinbonusDisp->setPosition(330,220);
+		hud->addChild(coinbonusDisp);		
+		//total score
+		ScreenLabel * score = new ScreenLabel("Total Score: ", 16);
+		score->setPosition(220,240);
+		hud->addChild(score);
+		ScreenLabel * scoreDisp = new ScreenLabel(String::IntToString(player.coins*100 + timeBonusPoints), 16);
+		scoreDisp->setPosition(330,240);
+		hud->addChild(scoreDisp);
+				
 		Vector3 winPos = level->getLevel(level->getLevelSize() - 1)->light->getPosition();
 		Vector3 winDir = winPos - player.getPosition();
 		winDir.Normalize();
