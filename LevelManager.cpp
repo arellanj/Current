@@ -41,7 +41,6 @@ void LevelManager::Update( Number elapsed, Player & player)
 	  	  player.setMaxSpeed( levels[i]->getspeed());
 
 
-		  levels[player.levelPos]->addLevelScene();
 	  	  if (player.levelPos < levels.size()-1 )
 	  		{
 		  	  levels[player.levelPos +1 ]->addLevelScene();
@@ -50,6 +49,7 @@ void LevelManager::Update( Number elapsed, Player & player)
 	  		{
 		  	  levels[player.levelPos - 2 ]->removeLevelScene();
 			}
+		  levels[player.levelPos]->addLevelScene();
 		  break;
 		}
 
