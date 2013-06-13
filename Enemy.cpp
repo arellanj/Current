@@ -2,6 +2,7 @@
 #include "PolycodeView.h"
 #include "Polycode3DPhysics.h"
 #include <iostream>
+#include "player.h"
 
 #ifndef __ENEMY_CPP__
 #define __ENEMY_CPP__
@@ -47,9 +48,10 @@ public:
 		box->alphaTest = true;
 	}
 	
-	void update(Number elapsed, Number dist){
+	void update(Number elapsed, Player player){
 			
-
+		double dist = player.getPosition().z;
+		Vector3 pos = player.getPosition();
 		// cool alpha effect 
 		if(visible){
 			if((box->getPosition().z - 2) > dist){
@@ -71,7 +73,11 @@ public:
 		
 		if(type== COIN){
 			box->Yaw(100*elapsed);
-			
+			Vector3 dist = player.getPosition() - box->getPosition();
+			if(dist.length() < 2){
+				dist.Normalize();
+				box->Translate(dist*elapsed*10);
+			}
 		}
 		if(type == SHARK){
 			swingValue += elapsed*(rand() % 6 + 1);

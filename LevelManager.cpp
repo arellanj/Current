@@ -82,7 +82,7 @@ void LevelManager::Update( Number elapsed, Player & player)
 	player.obj->setPositionX(pos.x);
 	player.obj->setPositionY(pos.y);
 
-  	enemies.update(elapsed, player.getPosition().z);
+  	enemies.update(elapsed, player);
  
 }
 
