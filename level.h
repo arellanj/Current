@@ -36,10 +36,10 @@ class Level
 			
 			setupEnemies(roomType, size);
 
-			floor = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*size,0.1,1*length);
-			lwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*10,0.1,1*length);
-			rwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*10,0.1,1*length);
-			ceil = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*size,0.1,1*length);
+			floor = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*size,0.2,1*length);
+			lwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*10,0.2,1*length);
+			rwall = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*10,0.2,1*length);
+			ceil = new ScenePrimitive(ScenePrimitive::TYPE_BOX, 1*size,0.2,1*length);
 			lblind = new ScenePrimitive(ScenePrimitive::TYPE_PLANE, 6,10);
 			rblind = new ScenePrimitive(ScenePrimitive::TYPE_PLANE, 6,10);
 			

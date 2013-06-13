@@ -57,23 +57,23 @@ void LevelManager::Update( Number elapsed, Player & player)
 
   	levels[player.levelPos]->collideUpdate(player);
 
-	Number r = player.obj->getBBoxRadius();
+	Number r = player.obj->getBBoxRadius()*2;
 	Vector3 pos = player.getPosition();
 	double size = 0.5*levels[player.levelPos]->size;
-	if( ( pos.x - r ) < -size )
+	if( ( pos.x - r ) < -size + .1)
 	{
 		pos.x = -size + r;
 	}
-	else if( ( pos.x + r ) > size)
+	else if( ( pos.x + r ) > size - .1)
 	{
 		pos.x = (size - r);
 	}
 
-	if( ( pos.y - r ) < -5)
+	if( ( pos.y - r ) < -5 + .1)
 	{
 		pos.y = -5 + r;
 	}
-	else if( ( pos.y + r ) > 5)
+	else if( ( pos.y + r ) > 5 - .1)
 	{
 		pos.y = (5 - r);
 	}
